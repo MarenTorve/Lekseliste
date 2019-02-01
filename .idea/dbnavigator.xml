@@ -23,16 +23,12 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes>
-      <connection connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
-        <schema name="pg_catalog" object-types="function, table, view" />
-      </connection>
-    </loaded-nodes>
+    <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
-      <console name="Heroku" type="STANDARD"><![CDATA[commit]]></console>
-      <console name="Heroku 1" type="STANDARD"><![CDATA[CREATE TABLE public."tblUser"
+      <console name="Heroku" type="STANDARD" schema="" session="Main"><![CDATA[commit]]></console>
+      <console name="Heroku 1" type="STANDARD" schema="" session="Main"><![CDATA[CREATE TABLE public."tblUser"
 (
     "fdUserID" SMALLSERIAL NOT NULL,
     "fdUserName" text COLLATE pg_catalog."default" NOT NULL,
@@ -41,6 +37,9 @@
     CONSTRAINT "tblUser_unique" UNIQUE ("fdUserName")
 );]]></console>
     </connection>
+  </component>
+  <component name="DBNavigator.Project.DatabaseFileManager">
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" />
@@ -106,6 +105,12 @@
           <key-file value="" />
           <key-passphrase value="" />
         </ssh-settings>
+        <ssl-settings>
+          <active value="false" />
+          <certificate-authority-file value="" />
+          <client-certificate-file value="" />
+          <client-key-file value="" />
+        </ssl-settings>
         <details>
           <charset value="UTF-8" />
           <session-management value="true" />
