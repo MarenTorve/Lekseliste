@@ -1,13 +1,50 @@
 <html>
 
 <head>
-  <title>Express</title>
+  <title>Lekseliste</title>
   <link rel="stylesheet" href="stylesheets/style.css">
 </head>
 
 <body>
-  <h1>Express</h1>
-  <p>Welcome to Express</p>
+  <h1>LEKSELISTE</h1>
+  <p>Welcome</p>
+  <fieldset>
+    <legend>Login: </legend>
+    <label for="txtUserName">Brukernavn: </label>
+    <input type="text" id="txtUserName" name="fdUserName">
+    <br />
+    <label for="txtPassword">Passord: </label>
+    <input type="password" id="txtPassword" name="fdPassword">
+    <br />
+    <button onclick="restLogin()">Login</button>
+  </fieldset>
+<form action="/todolist" method="get">
+  <input type="hidden" id="hiddenToken" name="token">
+  <input type="hidden" id="hiddenUserId" name="fdUserId">
+</form>
+
+  <!-- Programmerer på klientsiden JavaScript-->
+<script>
+  //global DOM (document object model) elementer
+  let txtUserName;
+  let txtPassword;
+  let hiddenToken;
+  let hiddenUserID;
+
+  //Venter til hele nettsiden er lastet slik at alle elementer er på plass
+  window.onload = function (){
+      //henter felter fra HTML (DOM)
+      txtUserName = document.getElementById("txtUserName");
+      txtPassword = document.getElementById("txtPassword");
+      hiddenToken = document.getElementById("hiddenToken");
+      hiddenUserID = document.getElementById("hiddenUserID");
+  };
+
+  function restLogin() {
+      //TODO:Her skal vi kjøre fetch-kommando (Ajax/restAPI om du vil
+  }
+</script>
+
 </body>
 
 </html>

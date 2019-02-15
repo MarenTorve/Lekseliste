@@ -17,7 +17,7 @@ exports.select = async function(sql, params){                     //eksporterer 
             try{                                                  //prøv å kjør connect
                 const client = await pool.connect();
                 const {rows} = await client.query(sql, params);   //sender sql-komando til DB og tester
-                response.row = rows;                              //returerer rader i en array
+                response.rows = rows;                              //returerer rader i en array
             }
             catch (e) {
                 response.err = e;                                 //kommer fra interne feil
@@ -25,3 +25,7 @@ exports.select = async function(sql, params){                     //eksporterer 
         }) ().catch (e => response.err = e.stack);      //kommer her hvis det er feil fra systemene
         return response;
 };
+
+/*
+SELECT * FROM "tblUser" WHERE("fdUserName" = $1)
+ */

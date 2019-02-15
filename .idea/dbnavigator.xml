@@ -27,7 +27,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
-      <console name="Heroku" type="STANDARD" schema="" session="Main"><![CDATA[commit]]></console>
+      <console name="Heroku" type="STANDARD" schema="public" session="Main"><![CDATA[commit]]></console>
       <console name="Heroku 1" type="STANDARD" schema="" session="Main"><![CDATA[CREATE TABLE public."tblUser"
 (
     "fdUserID" SMALLSERIAL NOT NULL,
