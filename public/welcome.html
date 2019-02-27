@@ -3,6 +3,7 @@
 <head>
   <title>Lekseliste</title>
   <link rel="stylesheet" href="stylesheets/style.css">
+  <script src="JavaScript/lib.js"></script>
 </head>
 
 <body>
@@ -103,15 +104,7 @@
     location.reload();
   }
 
-  function getTemplateContent(aTemplateID){
-    const t = document.querySelector('#' + aTemplateID);
-    return document.importNode(t.content, true);
-  }
 
-  function showContent(aContent, aDestID) {
-    const dest = document.getElementById(aDestID);
-    dest.appendChild(aContent);
-  }
 
 </script>
 

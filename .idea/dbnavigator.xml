@@ -26,14 +26,14 @@
     <loaded-nodes>
       <connection connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
         <schema name="pg_catalog" object-types="function, table, view" />
-        <schema name="public" object-types="function, table, view" />
+        <schema name="public" object-types="column, constraint, function, index, sequence, table, dataset trigger, view" />
       </connection>
     </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
-      <console name="Heroku" type="STANDARD"><![CDATA[SELECT COALESCE(MAX("fdToDoListID"),0) + 1 AS "newID" FROM "tblListItem"
-WHERE "fdUserID" = $1]]></console>
+      <console name="Heroku" type="STANDARD"><![CDATA[SELECT * FROM "tblListItem"
+WHERE "fdToDoListID" = 1 AND "fdUserID" = 1;]]></console>
       <console name="Heroku 1" type="STANDARD"><![CDATA[CREATE TABLE public."tblUser"
 (
     "fdUserID" SMALLSERIAL NOT NULL,
@@ -49,6 +49,14 @@ WHERE "fdUserID" = $1]]></console>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" />
+  </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-list connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" dataset="public.tblToDoList" active-filter-id="EMPTY_FILTER" />
+    <filter-list connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" dataset="public.tblListItem" active-filter-id="">
+      <filter id="8d79ca0e-eea8-44c4-b799-1d14784fa2d5" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="fdListItemID" operator="=" value="" active="true" />
+      </filter>
+    </filter-list>
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />

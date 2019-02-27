@@ -9,7 +9,7 @@ const pathPublic = path.join(__dirname,"../public");
 router.get('/', async function(req, res, next) {
   req.query.fdUserID;
   if(auth.isAuth(req.query.token)){
-    res.sendFile(pathPublic + "/todolist.html");
+    res.sendFile(pathPublic + "/todolistitem.html");
   }else{
     res.redirect('/');
   }
@@ -23,26 +23,47 @@ router.post('/create', async function(req, res, next) {
     res.status(403).end();
     return;
   }
-    console.log("Lager ny liste.....");
   req.body.fdUserID = parseInt(req.body.fdUserID);
-  const sqlNewID = "SELECT COALESCE(MAX(\"fdToDoListID\"),0) + 1 AS \"newID\" \n" +
-    "FROM \"tblToDoList\" \n" +
-    "WHERE \"fdUserID\" = $1";
-  const sqlInsert = "insert into \"tblToDoList\" (\"fdToDoListID\",\"fdUserID\",\"fdCaption\")\n" +
-    "values ($1,$2,$3)";
 
+  const sqlNewID = "SELECT COALESCE(MAX(\"fdListItemID\"),0) + 1 AS \"newID\" FROM \"tblListItem\"\n" +
+    "WHERE \"fdToDoListID\" = $1 AND \"fdUserID\" = $2;";
 
+  const sqlInsert = "insert into \"tblListItem\" (\n" +
+    "    \"fdListItemID\",\n" +
+    "    \"fdToDoListID\",\n" +
+    "    \"fdUserID\",\n" +
+    "    \"fdCaption\",\n" +
+    "    \"fdDateCreate\",\n" +
+    "    \"fdDateDone\",\n" +
+    "    \"fdDateDue\")\n" +
+    "values (\n" +
+    "    $1,\n" +
+    "    $2,\n" +
+    "    $3,\n" +
+    "    $4,\n" +
+    "    $5,\n" +
+    "    $6,\n" +
+    "    $7);";
 
-  let params = [req.body.fdUserID];
-  let result = await pg.select(sqlNewID,params);
+  let params = [req.body.fdToDoListID, req.body.fdUserID];
+  let result = await pg.select(sqlNewID, params);
   if(result.err !== undefined){
     console.log(sqlNewID);
     console.log(result.err.message);
     res.status(500).end();
     return;
   }
-  const fdToDoListID = result.rows[0].newID;
-  params = [fdToDoListID,req.body.fdUserID,req.body.fdCaption];
+  const fdListItemID = result.rows[0].newID;
+  req.body.fdDateDone = null;
+  params = [
+    fdListItemID,
+    req.body.fdToDoListID,
+    req.body.fdUserID,
+    req.body.fdCaption,
+    req.body.fdDateCreate,
+    req.body.fdDateDone,
+    req.body.fdDateDue
+  ];
   result = await pg.insert(sqlInsert,params);
   if(result.err !== undefined){
     console.log(params);
@@ -59,10 +80,11 @@ router.post('/read', async function(req, res, next) {
     res.status(403).end();
     return;
   }
+  req.body.fdToDoListID = parseInt(req.body.fdToDoListID);
   req.body.fdUserID = parseInt(req.body.fdUserID);
-  const sqlSelect = "SELECT * FROM \"tblToDoList\" \n" +
-    "WHERE \"fdUserID\" = $1;";
-  const params = [req.body.fdUserID];
+  const sqlSelect = "SELECT * FROM \"tblListItem\"\n" +
+    "WHERE \"fdToDoListID\" = $1 AND \"fdUserID\" = $2;";
+  const params = [req.body.fdToDoListID, req.body.fdUserID];
   const result = await pg.select(sqlSelect,params);
   if(result.err !== undefined){
     console.log(sqlSelect);
@@ -81,9 +103,7 @@ router.post('/update', async function(req, res, next) {
   }
   req.body.fdToDoListID = parseInt(req.body.fdToDoListID);
   req.body.fdUserID = parseInt(req.body.fdUserID);
-  const sqlUpdate = "UPDATE \"tblToDoList\"\n" +
-    "SET \"fdCaption\" = $3\n" +
-    "WHERE \"fdToDoListID\" = $1 and \"fdUserID\" = $2;";
+  const sqlUpdate = "";
   const params = [req.body.fdToDoListID,req.body.fdUserID,req.body.fdCaption];
   const result = await pg.update(sqlUpdate,params);
   if(result.err !== undefined){
@@ -103,8 +123,7 @@ router.post('/delete', async function(req, res, next) {
   }
   req.body.fdToDoListID = parseInt(req.body.fdToDoListID);
   req.body.fdUserID = parseInt(req.body.fdUserID);
-  const sqlDelete = "DELETE FROM \"tblToDoList\"\n" +
-    "WHERE \"fdToDoListID\" = $1 AND \"fdUserID\" = $2;";
+  const sqlDelete = "";
   const params = [req.body.fdToDoListID,req.body.fdUserID];
   const result = await pg.delete(sqlDelete,params);
   if(result.err !== undefined){

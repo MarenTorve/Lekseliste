@@ -5,7 +5,8 @@ const logger = require('morgan');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const todoListRouter = require('./routes/todolist');
+const toDoListRouter = require('./routes/todolist');
+const toDoListItemRouter = require('./routes/todolistitem');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/todolist',todoListRouter);
+app.use('/todolist',toDoListRouter);
+app.use('/todolist/listitem',toDoListItemRouter);
 
 module.exports = app;

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lekseliste</title>
+  <script src="../JavaScript/lib.js"></script>
+  <link rel="stylesheet" href="../stylesheets/style.css">
+</head>
+<body>
+<h1>Hei, her er min lekseliste</h1>
+<div>
+  <table border 1px>
+    <thead>
+    <tr>
+      <th>Item ID</th>
+      <th>Liste ID</th>
+      <th>Bruker ID</th>
+      <th>Beskrivelse</th>
+      <th>Opprettet</th>
+      <th>Frist</th>
+      <th>Ferdig</th>
+      <th colspan="2">Rediger</th>
+    </tr>
+    </thead>
+    <tbody id="htmlTBodyListItem">
+    </tbody>
+  </table><br/>
+</div>
+<br/><fieldset style=width:328px>
+  <legend>Legg til lekse: </legend><br/>
+  📝<label for="txtCaption"></label>
+  <input type="text" id="txtCaption" style=width:298px><br/><br/>
+  <label for="dateDue">Frist <br/><br/>📅 Dato: </label>
+  <input type="date" id="dateDue">
+  <label for="timeDue">⏰ Kl: </label>
+  <input type="time" id="timeDue"> <br/><br/><br/>
+  <button onclick="addNewListItem()">Legg til</button>
+</fieldset>
+<template id="templateListItemRow">
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="cursor: pointer;"></td>
+    <td style="cursor: pointer;"></td>
+  </tr>
+</template>
+
+<script>
+
+  const token = localStorage.getItem('token');
+  const fdToDoListID = localStorage.getItem('fdToDoListID');
+  const fdUserID = localStorage.getItem('fdUserID');
+  let dateDue;
+  let timeDue;
+  let txtCaption;
+  let htmlTBodyListItem;
+
+  window.onload = function(){
+    dateDue = document.getElementById("dateDue");
+    timeDue = document.getElementById("timeDue");
+    txtCaption = document.getElementById("txtCaption");
+    htmlTBodyListItem = document.getElementById("htmlTBodyListItem");
+    getListItemFromServer().then();
+  };
+
+  async function addNewListItem(){
+    const dtDue = new Date(dateDue.valueAsDate.valueOf() + timeDue.valueAsDate.valueOf());
+
+    let data = {
+      token: token,
+      fdToDoListID: fdToDoListID,
+      fdUserID: fdUserID,
+      fdCaption: txtCaption.value,
+      fdDateDue: dtDue,
+      fdDateCreate: new Date()
+    };
+
+    const route = "/todolist/listitem/create";
+    const json = await RestAPI(RestAPIMethod.POST, route, data);
+    if (json !== null) {
+      getListItemFromServer().then();
+    }
+  }
+
+  async function getListItemFromServer() {
+    let data = {
+      token: token,
+      fdToDoListID: fdToDoListID,
+      fdUserID: fdUserID,
+    };
+
+    let route = "/todolist/listitem/read";
+    let json = await RestAPI(RestAPIMethod.POST, route, data);
+    if (json !== null) {
+      htmlTBodyListItem.innerHTML = "";
+      for(let i = 0; i < json.length; i++){
+        let htmlRow = getTemplateContent("templateListItemRow");
+        const htmlTDs = htmlRow.querySelectorAll("td");
+        htmlTDs[0].innerText = json[i].fdListItemID.toString();
+        htmlTDs[1].innerText = json[i].fdToDoListID.toString();
+        htmlTDs[2].innerText = json[i].fdUserID.toString();
+        htmlTDs[4].innerText = json[i].fdDateCreate;
+        htmlTDs[3].innerText = json[i].fdCaption;
+        htmlTDs[5].innerText = json[i].fdDateDue;
+        htmlTDs[6].innerText = json[i].fdDateDone;
+        htmlTDs[7].innerText = "🔧";
+        htmlTDs[7].onclick = function(){
+          //editRowItem(htmlTDs,json[i].fdToDoListID);
+        };
+        htmlTDs[8].innerText = "❌";
+        htmlTDs[8].onclick = function (){
+          //deleteRowItem(json[i].fdToDoListID);
+        };
+        htmlTBodyListItem.appendChild(htmlRow);
+      }
+    }
+  }
+</script>
+
+</body>
+</html>

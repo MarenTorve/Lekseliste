@@ -30,7 +30,7 @@ router.post('/login', async function (req,res,next) {
         const row = result.rows[0];
         let token = auth.doAuth(row.fdUserID, row.fdUserName);
         let jsonResponse = {token: token, fdUserID: row.fdUserID};
-        res.status(200).json(jsonResponse).end;
+        res.status(200).json(jsonResponse).end();
       }
     }
   }

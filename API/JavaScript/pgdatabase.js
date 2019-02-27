@@ -13,7 +13,20 @@ const connectionData =  {
 const client = new Pool(connectionData);
 
 //DUMMY database tabeller
-exports.tblToDoList = {fdToDoListID:0,fdUserID:0, fdCaption:""};
+exports.tblToDoList = {
+  fdToDoListID: 0,
+  fdUserID: 0,
+  fdCaption: ""
+};
+exports.tblListItem = {
+  fdListItemID: 0,
+  fdToDoListID: 0,
+  fdUserID: 0,
+  fdDateCreate: "2019-01-01 00:00:00-02",
+  fdDateDue: "2019-01-01 00:00:00-02",
+  fdDateDone: "2019-01-01 00:00:00-02",
+  fdCaption: ""
+};
 
 exports.select = async function(aSql, aParams){                     //eksporterer en funksjon som vi kaller for select - dette er egentlig en variabel
     const response = {err:undefined, rows: undefined};              // err og rows er udefinert
@@ -28,6 +41,30 @@ exports.select = async function(aSql, aParams){                     //eksportere
 };
 
 exports.insert = async function (aSql,aParams) {
+  const response = {err:undefined, rows: undefined};
+  try{
+    await client.query('BEGIN');
+    response.rows = await client.query(aSql,aParams);
+    await client.query('COMMIT');
+  }catch (e) {
+    response.err = e;
+  }
+  return response;
+};
+
+exports.update = async function (aSql,aParams) {
+  const response = {err:undefined, rows: undefined};
+  try{
+    await client.query('BEGIN');
+    response.rows = await client.query(aSql,aParams);
+    await client.query('COMMIT');
+  }catch (e) {
+    response.err = e;
+  }
+  return response;
+};
+
+exports.delete = async function (aSql,aParams) {
   const response = {err:undefined, rows: undefined};
   try{
     await client.query('BEGIN');
