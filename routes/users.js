@@ -6,7 +6,7 @@ INSERT INTO public."tblUser" ("fdUserName", "fdPassword")
 VALUES ('Maren', '987654');
  */
 
-let pg = require('./pgdatabase.js'); //en forekomst av biblioteket
+let pg = require('../API/JavaScript/pgdatabase.js'); //en forekomst av biblioteket
 
 /* GET users listing. */
 router.get('/', async function(req, res, next) {

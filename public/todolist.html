@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lekselister</title>
+  <script src="JavaScript/lib.js"></script>
+</head>
+<body>
+<h2>Dette er lekselistene mine</h2>
+<div>
+  <fieldset>
+    <legend>Lag ny liste: </legend>
+    <label for="txtCaption"></label>
+    <input type="text" id="txtCaption">
+    <button onclick="addNewList()">Legg til</button>
+  </fieldset>
+</div>
+<script>
+  const token = localStorage.getItem('token');
+  const fdUserID = localStorage.getItem('fdUserID');
+  let txtCaption;
+
+  window.onload = function () {
+  txtCaption = document.getElementById("txtCaption");
+  };
+
+  async function addNewList() {
+    let data = {
+      token: token,
+      fdUserID: fdUserID,
+      fdCaption: txtCaption.value
+    };
+
+    let route = "/todolist/create";
+    let json = await RestAPI(RestAPIMethod.POST, route, data);
+    if(json !== null) {
+
+    }
+  }
+
+
+</script>
+</body>
+</html>
