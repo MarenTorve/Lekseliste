@@ -23,27 +23,18 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes />
+    <loaded-nodes>
+      <connection connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
+        <schema name="pg_catalog" object-types="function, table, view" />
+        <schema name="public" object-types="column, constraint, function, index, sequence, table, dataset trigger, view" />
+      </connection>
+    </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
-      <console name="Heroku" type="STANDARD" schema="public" session="Pool"><![CDATA[Select NOW() as fdNow;insert into "tblListItem" (
-    "fdListItemID",
-    "fdToDoListID",
-    "fdUserID",
-    "fdCaption",
-    "fdDateCreate",
-    "fdDateDone",
-    "fdDateDue")
-values (
-    :fdListItemID,
-    :fdToDoListID,
-    :fdUserID,
-    :fdCaption,
-    current_timestamp,
-    :fdDateDone,
-    (SELECT Now() as dateNow));]]></console>
-      <console name="Heroku 1" type="STANDARD" schema="" session="Main"><![CDATA[CREATE TABLE public."tblUser"
+      <console name="Heroku" type="STANDARD"><![CDATA[SELECT * FROM "tblListItem"
+WHERE "fdToDoListID" = 1 AND "fdUserID" = 1;]]></console>
+      <console name="Heroku 1" type="STANDARD"><![CDATA[CREATE TABLE public."tblUser"
 (
     "fdUserID" SMALLSERIAL NOT NULL,
     "fdUserName" text COLLATE pg_catalog."default" NOT NULL,
@@ -61,28 +52,17 @@ values (
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-list connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" dataset="public.tblToDoList" active-filter-id="EMPTY_FILTER" />
-    <filter-list connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" dataset="public.tblListItem" active-filter-id="8595456e-5ded-46bb-a8c4-11d810a9868c">
+    <filter-list connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" dataset="public.tblListItem" active-filter-id="">
       <filter id="8d79ca0e-eea8-44c4-b799-1d14784fa2d5" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
         <condition column="fdListItemID" operator="=" value="" active="true" />
       </filter>
-      <filter id="8595456e-5ded-46bb-a8c4-11d810a9868c" name="1 &amp; 3" temporary="false" custom-name="false" type="basic" join-type="AND">
-        <condition column="fdToDoListID" operator="=" value="1" active="true" />
-        <condition column="fdUserID" operator="=" value="3" active="true" />
-      </filter>
     </filter-list>
-    <filter-list connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" dataset="public.tblUser" active-filter-id="" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.FileConnectionMappingManager">
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/selectAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/insertAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
     <mapping file-url="file://$PROJECT_DIR$/Data/CreateUser.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/deleteAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/updatePassword.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/CreateListItem.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/CreateSharedToDoList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
   </component>
   <component name="DBNavigator.Project.MethodExecutionManager">
     <method-browser />
@@ -124,7 +104,7 @@ values (
           <password value="ZDljMzFiN2E1MGNkNDYzN2E2NmJmOGEyZTllYTY0ODdlOTYxZjA1YzFkOTMyOGE1MmNjYzYwZWE5ZDYyMTU2OQ==" />
         </database>
         <properties>
-          <auto-commit value="true" />
+          <auto-commit value="false" />
           <properties>
             <property key="sslmode" value="require" />
           </properties>
@@ -139,12 +119,6 @@ values (
           <key-file value="" />
           <key-passphrase value="" />
         </ssh-settings>
-        <ssl-settings>
-          <active value="false" />
-          <certificate-authority-file value="" />
-          <client-certificate-file value="" />
-          <client-key-file value="" />
-        </ssl-settings>
         <details>
           <charset value="UTF-8" />
           <session-management value="true" />
@@ -592,16 +566,6 @@ values (
     </general-settings>
   </component>
   <component name="DBNavigator.Project.StatementExecutionManager">
-    <execution-variables>
-      <file file-url="db://448a0c41-8f65-4751-a66b-1a8c83e8e9f6/consoles/Heroku">
-        <variable name=":fdCaption" dataType="LITERAL" values="test 1" />
-        <variable name=":fdDateCreate" dataType="LITERAL" values="2019-03-03 21:19:00 +01:00, 2019-03-03 22:19:00 +01:00" />
-        <variable name=":fdUserID" dataType="LITERAL" values="3" />
-        <variable name=":fdListItemID" dataType="LITERAL" values="2, 1, 11, 10, 9, 8, 7, 6, 5, 4, 3" />
-        <variable name=":fdDateDue" dataType="LITERAL" values="2019-03-03 21:19:00 +03:00, 2019-03-03 22:19:00 +01:00" />
-        <variable name=":fdToDoListID" dataType="LITERAL" values="1" />
-        <variable name=":fdDateDone" dataType="LITERAL" values="2012-08-24 22:00:00, 2019-03-03 21:19:00 +02:00, 2019-03-03 22:19:00 +01:00" />
-      </file>
-    </execution-variables>
+    <execution-variables />
   </component>
 </project>
