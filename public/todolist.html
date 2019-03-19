@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lekselister</title>
+  <script src="JavaScript/lib.js"></script>
+  <link rel="stylesheet" href="stylesheets/style.css">
+</head>
+<body>
+<h2>Dette er lekselistene mine</h2>
+<div>
+  <table>
+    <thead>
+    <tr>
+      <th>Liste ID</th>
+      <th>Bruker ID</th>
+      <th>Beskrivelse</th>
+    </tr>
+    </thead>
+    <tbody id="htmlTBodyToDoList">
+    </tbody>
+  </table><br/>
+  <fieldset>
+    <legend>Lag ny liste: </legend>
+    <label for="txtCaption"></label>
+    <input type="text" id="txtCaption">
+    <button onclick="addNewList()">Legg til</button>
+  </fieldset>
+</div>
+<form id="formGetHtmlPage" action="/todolist/listitem" method="get">
+  <input type="hidden" id="hiddenToken" name="token">
+  <input type="hidden" id="hiddenToDoListID" name="fdToDoListID">
+  <input type="hidden" id="hiddenUserID" name="fdUserID">
+</form>
+<template id="templateToDoListRow">
+  <tr>
+    <td></td>
+    <td></td>
+    <td style="cursor: pointer; color: green;"></td>
+    <td style="cursor: pointer;"></td>
+    <td style="cursor: pointer;"></td>
+  </tr>
+
+</template>
+<script>
+  const token = localStorage.getItem('token');
+  const fdUserID = localStorage.getItem('fdUserID');
+  let txtCaption;
+  let htmlTBodyToDoList;
+  let hiddenToken;
+  let hiddenUserID;
+  let hiddenToDoListID;
+  let formGetHtmlPage;
+
+  window.onload = function () {
+  txtCaption = document.getElementById("txtCaption");
+  htmlTBodyToDoList = document.getElementById("htmlTBodyToDoList");
+  hiddenToken = document.getElementById("hiddenToken");
+  hiddenUserID = document.getElementById("hiddenUserID");
+  hiddenToDoListID = document.getElementById("hiddenToDoListID");
+  formGetHtmlPage = document.getElementById("formGetHtmlPage");
+
+  getListFromServer().then();
+  };
+
+  async function getListFromServer(){
+    let data = {
+      token: token,
+      fdUserID: fdUserID,
+    };
+
+    let route = "/todolist/read";
+    let json = await RestAPI(RestAPIMethod.POST, route, data);
+    if(json !== null) {
+      htmlTBodyToDoList.innerHTML = "";
+      for(let i = 0; i < json.length; i++){
+      let htmlRow = getTemplateContent("templateToDoListRow");
+      const htmlTDs = htmlRow.querySelectorAll("td");
+      htmlTDs[0].innerText = json[i].fdToDoListID.toString();
+      htmlTDs[1].innerText = json[i].fdUserID.toString();
+      htmlTDs[2].innerText = json[i].fdCaption.toString();
+      htmlTDs[2].onclick = function(){
+        localStorage.setItem("fdToDoListID",json[i].fdToDoListID);
+        hiddenToken.value = token;
+        hiddenToDoListID.value = json[i].fdToDoListID;
+        hiddenUserID.value = fdUserID;
+        formGetHtmlPage.submit();
+      };
+      htmlTDs[3].innerText = "🔧";
+      htmlTDs[3].onclick = function(){
+        editRowItem(htmlTDs,json[i].fdToDoListID);
+      };
+      htmlTDs[4].innerText = "❌";
+      htmlTDs[4].onclick = function (){
+        deleteRowItem(json[i].fdToDoListID);
+      };
+      htmlTBodyToDoList.appendChild(htmlRow);
+      }
+    }
+  }
+  async function addNewList() {
+    let data = {
+      token: token,
+      fdUserID: fdUserID,
+      fdCaption: txtCaption.value
+    };
+
+    let route = "/todolist/create";
+    let json = await RestAPI(RestAPIMethod.POST, route, data);
+    if(json !== null) {
+      getListFromServer().then();
+    }
+  }
+
+  function editRowItem(aRow,aListID){
+    const fdCaption = aRow[2].innerText;
+    aRow[2].innerText = aRow[2].innerHTML = "";
+    const htmlInput = document.createElement("input");
+    htmlInput.type = "text";
+    htmlInput.value = fdCaption;
+    aRow[2].appendChild(htmlInput);
+    aRow[3].innerText = "✅";
+    aRow[3].onclick = function () {
+      postItemToServer(aListID, htmlInput.value).then();
+    };
+    aRow[4].innerText = "⛔";
+    aRow[4].onclick = function () {
+      getListFromServer().then();
+    }
+  }
+
+  async function postItemToServer(aItemID, aCaption) {
+    let data = {
+      token: token,
+      fdToDoListID: aItemID,
+      fdUserID: fdUserID,
+      fdCaption: aCaption
+    };
+
+    let route = "/todolist/update";
+    let json = await RestAPI(RestAPIMethod.POST, route, data);
+    if(json !== null) {
+      getListFromServer().then();
+    }
+  }
+
+  async function deleteRowItem (aItemID){
+    let data = {
+      token: token,
+      fdToDoListID: aItemID,
+      fdUserID: fdUserID
+    };
+
+    let route = "/todolist/delete";
+    let json = await RestAPI(RestAPIMethod.POST, route, data);
+    if(json !== null) {
+      getListFromServer().then();
+    }
+  }
+
+</script>
+</body>
+</html>

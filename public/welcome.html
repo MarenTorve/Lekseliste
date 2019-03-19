@@ -1,0 +1,113 @@
+<html>
+
+<head>
+  <title>Lekseliste</title>
+  <link rel="stylesheet" href="stylesheets/style.css">
+  <script src="JavaScript/lib.js"></script>
+</head>
+
+<body>
+  <h1>LEKSELISTE</h1>
+  <p>Welcome</p>
+  <div id="divShowTemplate">
+
+  </div>
+
+  <div>
+    <span id="txtInfoFromServer"></span>
+  </div>
+<form id="formGetHtmlPage" action="/todolist" method="get">
+  <input type="hidden" id="hiddenToken" name="token">
+  <input type="hidden" id="hiddenUserID" name="fdUserID">
+</form>
+
+  <template id="templateLogin">
+    <fieldset>
+      <legend>Login: </legend>
+      <label for="txtUserName">Brukernavn: </label>
+      <input type="text" id="txtUserName" name="fdUserName">
+      <br />
+      <label for="txtPassword">Passord: </label>
+      <input type="password" id="txtPassword" name="fdPassword">
+      <br />
+      <button onclick="restLogin()">Login</button>
+    </fieldset>
+  </template>
+  <template id="templateLogout">
+    <button onclick="logout()">Logg ut</button>
+  </template>
+
+  <!-- Programmerer på klientsiden JavaScript-->
+<script>
+  //global DOM (document object model) elementer
+  let txtUserName;
+  let txtPassword;
+  let hiddenToken;
+  let hiddenUserID;
+  let txtInfoFromServer;
+  let formGetHtmlPage;
+
+  const token = localStorage.getItem('token');
+  const fdUserID = localStorage.getItem('fdUserID');
+
+  //Venter til hele nettsiden er lastet slik at alle elementer er på plass
+  window.onload = function (){
+      //henter felter fra HTML (DOM)
+      hiddenToken = document.getElementById("hiddenToken");
+      hiddenUserID = document.getElementById("hiddenUserID");
+      txtInfoFromServer = document.getElementById("txtInfoFromServer");
+      formGetHtmlPage = document.getElementById("formGetHtmlPage");
+
+      if((token != undefined) && (fdUserID != undefined)){
+        const c = getTemplateContent("templateLogout");
+        showContent(c,"divShowTemplate");
+
+      }else{
+        const c = getTemplateContent("templateLogin");
+        showContent(c,"divShowTemplate");
+        txtUserName = document.getElementById("txtUserName");
+        txtPassword = document.getElementById("txtPassword");
+      }
+  };
+
+  async function restLogin() {
+    let data = {
+      fdUserName: txtUserName.value,
+      fdPassword: txtPassword.value
+    };
+    let body = JSON.stringify(data);
+    let headers  = {
+      'Accept' : 'application/json',
+      'Content-Type' : 'application/json'
+    };
+    let request = {
+      method: 'POST', headers: headers, body: body
+    };
+    let route = "/login";
+    let jsonResponse = await fetch(route,request);
+    if(jsonResponse.status > 200){
+      txtInfoFromServer.innerText = "Feil fra systemet";
+    }else{
+      let response = await jsonResponse.json();
+      txtInfoFromServer.innerText = response.fdUserID + ", " + response.token;
+      localStorage.setItem('token',response.token);
+      localStorage.setItem('fdUserID', response.fdUserID);
+      hiddenToken.value = response.token;
+      hiddenUserID.value = response.fdUserID;
+      formGetHtmlPage.submit();
+    }
+  }
+
+  function logout(){
+    localStorage.removeItem('token');
+    localStorage.removeItem('fdUserID');
+    location.reload();
+  }
+
+
+
+</script>
+
+</body>
+
+</html>
