@@ -31,7 +31,28 @@
   </template>
   <template id="templateLogout">
     <button onclick="logout()">Logg ut</button>
+    <button onclick="restDeleteUser().then()">Slett meg!</button>
   </template>
+
+
+  <template id="templateNewUser">
+    <fieldset>
+      <legend>Ny Bruker </legend>
+
+      <label for="txtNewUserName">Brukernavn: </label>
+      <input type="text" id="txtNewUserName" name="fdUserName">
+      <br />
+
+      <label for="txtNewPassword">Passord: </label>
+      <input type="password" id="txtNewPassword" name="fdPassword">
+
+      <label for="txtConfirmPassword">Bekreft Passord: </label>
+      <input type="password" id="txtConfirmPassword" name="fdPassword">
+      <br />
+      <button onclick="restNewUser().then()">Registrer</button>
+    </fieldset>
+  </template>
+
 
   <!-- Programmerer på klientsiden JavaScript-->
 <script>
@@ -40,6 +61,9 @@
   let txtPassword;
   let txtInfoFromServer;
   let formGetHtmlPage;
+  let txtNewUserName;
+  let txtNewPassword;
+  let txtConfirmPassword;
 
   const token = localStorage.getItem('token');
   const fdUserID = localStorage.getItem('fdUserID');
@@ -55,11 +79,17 @@
         showContent(c,"divShowTemplate");
 
       }else{
-        const c = getTemplateContent("templateLogin");
+        let c = getTemplateContent("templateLogin");
         showContent(c,"divShowTemplate");
         txtUserName = document.getElementById("txtUserName");
         txtPassword = document.getElementById("txtPassword");
         txtPassword.addEventListener("keydown", enterKeyPressed, false);
+
+        c = getTemplateContent("templateNewUser");
+        showContent(c, "divShowTemplate");
+        txtNewUserName = document.getElementById("txtNewUserName");
+        txtNewPassword = document.getElementById("txtNewPassword");
+        txtConfirmPassword = document.getElementById("txtConfirmPassword");
       }
   };
 
@@ -76,6 +106,43 @@
         {token: json.token, fdUserID: json.fdUserID}
       );
     }
+  }
+
+
+  async function restNewUser() {
+    if(isConfirmPasswordOK() === false){
+      txtConfirmPassword.style.backgroundColor = "red";
+      return;
+    }
+    txtConfirmPassword.style.backgroundColor = "white";
+    const data = {
+      fdUserName: txtNewUserName.value,
+      fdPassword: txtNewPassword.value,
+    };
+
+    const json = await RestAPI("POST", "/users/create",data);
+    if(json === null){
+      //TODO: OOOPS fikk ikke laget ny bruker!!!
+    }
+  }
+
+  async function restDeleteUser() {
+    const data ={
+      token: token,
+      fdUserID: fdUserID
+    };
+
+    const json = await RestAPI("POST", "/users/delete",data);
+    if(json === null){
+      //TODO: OOOPS fikk ikke slettet bruker!!!
+    }else{
+      logout();
+    }
+
+  }
+
+  function isConfirmPasswordOK() {
+    return txtNewPassword.value === txtConfirmPassword.value;
   }
 
   function logout(){

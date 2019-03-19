@@ -23,18 +23,23 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes />
+    <loaded-nodes>
+      <connection connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
+        <schema name="pg_catalog" object-types="table, function, view" />
+        <schema name="public" object-types="table, function, view, column" />
+      </connection>
+    </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
-      <console name="Heroku" type="STANDARD" schema="public" session="Pool"><![CDATA[Select NOW() as fdNow;insert into "tblListItem" (
-    "fdListItemID",
-    "fdToDoListID",
-    "fdUserID",
-    "fdCaption",
-    "fdDateCreate",
-    "fdDateDone",
-    "fdDateDue")
+      <console name="Heroku" type="STANDARD" schema="public" session="Pool">Select NOW() as fdNow;insert into &quot;tblListItem&quot; (
+    &quot;fdListItemID&quot;,
+    &quot;fdToDoListID&quot;,
+    &quot;fdUserID&quot;,
+    &quot;fdCaption&quot;,
+    &quot;fdDateCreate&quot;,
+    &quot;fdDateDone&quot;,
+    &quot;fdDateDue&quot;)
 values (
     :fdListItemID,
     :fdToDoListID,
@@ -42,15 +47,15 @@ values (
     :fdCaption,
     current_timestamp,
     :fdDateDone,
-    (SELECT Now() as dateNow));]]></console>
-      <console name="Heroku 1" type="STANDARD" schema="" session="Main"><![CDATA[CREATE TABLE public."tblUser"
+    (SELECT Now() as dateNow));</console>
+      <console name="Heroku 1" type="STANDARD" schema="" session="Main">CREATE TABLE public.&quot;tblUser&quot;
 (
-    "fdUserID" SMALLSERIAL NOT NULL,
-    "fdUserName" text COLLATE pg_catalog."default" NOT NULL,
-    "fdPassword" text COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "tblUser_pkey" PRIMARY KEY ("fdUserID"),
-    CONSTRAINT "tblUser_unique" UNIQUE ("fdUserName")
-);]]></console>
+    &quot;fdUserID&quot; SMALLSERIAL NOT NULL,
+    &quot;fdUserName&quot; text COLLATE pg_catalog.&quot;default&quot; NOT NULL,
+    &quot;fdPassword&quot; text COLLATE pg_catalog.&quot;default&quot; NOT NULL,
+    CONSTRAINT &quot;tblUser_pkey&quot; PRIMARY KEY (&quot;fdUserID&quot;),
+    CONSTRAINT &quot;tblUser_unique&quot; UNIQUE (&quot;fdUserName&quot;)
+);</console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
