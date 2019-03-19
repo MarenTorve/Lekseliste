@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c2dcda59-7d20-469f-a40f-56826ee1c8ca" name="Default Changelist" comment="" />
+    <list default="true" id="c2dcda59-7d20-469f-a40f-56826ee1c8ca" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/www" beforeDir="false" afterPath="$PROJECT_DIR$/bin/www" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -19,7 +23,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/API/JavaScript/librest.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
+            <state relative-caret-position="153">
               <caret line="9" column="9" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="31" />
             </state>
           </provider>
@@ -28,17 +32,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/todolist.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
+            <state relative-caret-position="153">
               <caret line="9" column="10" selection-start-line="9" selection-start-column="10" selection-end-line="9" selection-end-column="10" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/JavaScript/lib.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="214">
               <caret line="43" column="37" selection-start-line="43" selection-start-column="37" selection-end-line="43" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bin/www">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="14" column="50" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -86,11 +99,11 @@
         <option value="$PROJECT_DIR$/routes/psdatabase.js" />
         <option value="$PROJECT_DIR$/routes/pgdatabase.js" />
         <option value="$PROJECT_DIR$/API/JavaScript/auth.js" />
-        <option value="$PROJECT_DIR$/../../../Design/xmas_design_list_landscape.html" />
-        <option value="$PROJECT_DIR$/../../../Design/xmas_design_login_landscape.css" />
-        <option value="$PROJECT_DIR$/../../../Design/xmas_design_login_landscape.html" />
-        <option value="$PROJECT_DIR$/../../../Design/design_welcome.css" />
-        <option value="$PROJECT_DIR$/../../../Design/design_welcome.html" />
+        <option value="$USER_HOME$/Design/xmas_design_list_landscape.html" />
+        <option value="$USER_HOME$/Design/xmas_design_login_landscape.css" />
+        <option value="$USER_HOME$/Design/xmas_design_login_landscape.html" />
+        <option value="$USER_HOME$/Design/design_welcome.css" />
+        <option value="$USER_HOME$/Design/design_welcome.html" />
         <option value="$PROJECT_DIR$/public/welcome.html" />
         <option value="$PROJECT_DIR$/API/JavaScript/pgdatabase.js" />
         <option value="$PROJECT_DIR$/public/todolistitem.html" />
@@ -110,7 +123,6 @@
         <option value="$PROJECT_DIR$/Data/tblToDoList/tblListItem/setItemDone.sql" />
         <option value="$PROJECT_DIR$/Data/tblToDoList/tblListItem/insertAll.sql" />
         <option value="$PROJECT_DIR$/routes/index.js" />
-        <option value="$PROJECT_DIR$/bin/www" />
         <option value="$PROJECT_DIR$/API/HTML/welcome.html" />
         <option value="$PROJECT_DIR$/API/JavaScript/libpgdatabase.js" />
         <option value="$PROJECT_DIR$/Data/CreateSharedToDoList.sql" />
@@ -131,14 +143,15 @@
         <option value="$PROJECT_DIR$/API/JavaScript/librest.js" />
         <option value="$PROJECT_DIR$/routes/todolist.js" />
         <option value="$PROJECT_DIR$/public/JavaScript/lib.js" />
+        <option value="$PROJECT_DIR$/bin/www" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="1937" />
+    <option name="height" value="1057" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -151,19 +164,8 @@
         <subPane>
           <expand>
             <path>
-              <item name="lekseliste" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lekseliste" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="lekseliste" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lekseliste" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="lekseliste" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lekseliste" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="JavaScript" type="462c0819:PsiDirectoryNode" />
+              <item name="GIT" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GIT" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -177,7 +179,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="web-ide.project.structure" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -225,6 +227,7 @@
       <workItem from="1551546626046" duration="35108000" />
       <workItem from="1551864696267" duration="132000" />
       <workItem from="1552979946812" duration="2555000" />
+      <workItem from="1552986219406" duration="250000" />
     </task>
     <task id="LOCAL-00001" summary="Ny createToDoList sql">
       <created>1549022762733</created>
@@ -251,7 +254,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="150062000" />
+    <option name="totallyTimeSpent" value="150312000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -263,10 +266,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17597471" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17580965" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="DB Browser" order="2" weight="0.29135934" />
       <window_info id="Favorites" order="3" side_tool="true" weight="0.3296131" />
@@ -281,7 +283,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3286119" />
       <window_info anchor="bottom" id="DB Execution Console" order="9" weight="0.32694152" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.2319688" />
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.23087819" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50074404" side_tool="true" weight="0.23278688" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -302,11 +304,11 @@
     <option name="LAST_COMMIT_MESSAGE" value="Lag ny liste, problemer med å poste nytt element" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../../../Design/xmas_design_list_landscape.html" />
-    <entry file="file://$PROJECT_DIR$/../../../Design/xmas_design_login_landscape.html" />
-    <entry file="file://$PROJECT_DIR$/../../../Design/xmas_design_login_landscape.css" />
-    <entry file="file://$PROJECT_DIR$/../../../Design/design_welcome.html" />
-    <entry file="file://$PROJECT_DIR$/../../../Design/design_welcome.css" />
+    <entry file="file://$USER_HOME$/Design/xmas_design_list_landscape.html" />
+    <entry file="file://$USER_HOME$/Design/xmas_design_login_landscape.html" />
+    <entry file="file://$USER_HOME$/Design/xmas_design_login_landscape.css" />
+    <entry file="file://$USER_HOME$/Design/design_welcome.html" />
+    <entry file="file://$USER_HOME$/Design/design_welcome.css" />
     <entry file="db://448a0c41-8f65-4751-a66b-1a8c83e8e9f6/session_browsers/Heroku Sessions">
       <provider selected="true" editor-type-id="0.SESSION_BROWSER">
         <state>
@@ -337,13 +339,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../git/Lekseliste/routes/todolist.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="85" column="55" selection-start-line="83" selection-start-column="21" selection-end-line="85" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../../git/Lekseliste/routes/todolist.js" />
     <entry file="db://448a0c41-8f65-4751-a66b-1a8c83e8e9f6/objects/schemas/public/tables/tblToDoList">
       <provider selected="true" editor-type-id="1.DATA">
         <state row-count="14" readonly="false">
@@ -377,13 +373,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" column="70" lean-forward="true" selection-start-line="2" selection-start-column="70" selection-end-line="2" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bin/www">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" selection-start-line="13" selection-end-line="13" />
         </state>
       </provider>
     </entry>
@@ -570,20 +559,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="50" selection-start-line="13" selection-start-column="50" selection-end-line="13" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/API/JavaScript/librest.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="9" column="9" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Data/tblUser/deleteAll.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="44">
@@ -598,10 +573,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/API/JavaScript/librest.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="9" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/routes/todolist.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
+        <state relative-caret-position="153">
           <caret line="9" column="10" selection-start-line="9" selection-start-column="10" selection-end-line="9" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="50" selection-start-line="13" selection-start-column="50" selection-end-line="13" selection-end-column="50" />
         </state>
       </provider>
     </entry>
@@ -609,6 +598,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="214">
           <caret line="43" column="37" selection-start-line="43" selection-start-column="37" selection-end-line="43" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/www">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="50" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
         </state>
       </provider>
     </entry>

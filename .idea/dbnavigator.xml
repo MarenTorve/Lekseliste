@@ -23,23 +23,18 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes>
-      <connection connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
-        <schema name="pg_catalog" object-types="view, table, function" />
-        <schema name="public" object-types="column, view, table, function" />
-      </connection>
-    </loaded-nodes>
+    <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
-      <console name="Heroku" type="STANDARD" schema="public" session="Pool">Select NOW() as fdNow;insert into &quot;tblListItem&quot; (
-    &quot;fdListItemID&quot;,
-    &quot;fdToDoListID&quot;,
-    &quot;fdUserID&quot;,
-    &quot;fdCaption&quot;,
-    &quot;fdDateCreate&quot;,
-    &quot;fdDateDone&quot;,
-    &quot;fdDateDue&quot;)
+      <console name="Heroku" type="STANDARD" schema="public" session="Pool"><![CDATA[Select NOW() as fdNow;insert into "tblListItem" (
+    "fdListItemID",
+    "fdToDoListID",
+    "fdUserID",
+    "fdCaption",
+    "fdDateCreate",
+    "fdDateDone",
+    "fdDateDue")
 values (
     :fdListItemID,
     :fdToDoListID,
@@ -47,15 +42,15 @@ values (
     :fdCaption,
     current_timestamp,
     :fdDateDone,
-    (SELECT Now() as dateNow));</console>
-      <console name="Heroku 1" type="STANDARD" schema="" session="Main">CREATE TABLE public.&quot;tblUser&quot;
+    (SELECT Now() as dateNow));]]></console>
+      <console name="Heroku 1" type="STANDARD" schema="" session="Main"><![CDATA[CREATE TABLE public."tblUser"
 (
-    &quot;fdUserID&quot; SMALLSERIAL NOT NULL,
-    &quot;fdUserName&quot; text COLLATE pg_catalog.&quot;default&quot; NOT NULL,
-    &quot;fdPassword&quot; text COLLATE pg_catalog.&quot;default&quot; NOT NULL,
-    CONSTRAINT &quot;tblUser_pkey&quot; PRIMARY KEY (&quot;fdUserID&quot;),
-    CONSTRAINT &quot;tblUser_unique&quot; UNIQUE (&quot;fdUserName&quot;)
-);</console>
+    "fdUserID" SMALLSERIAL NOT NULL,
+    "fdUserName" text COLLATE pg_catalog."default" NOT NULL,
+    "fdPassword" text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "tblUser_pkey" PRIMARY KEY ("fdUserID"),
+    CONSTRAINT "tblUser_unique" UNIQUE ("fdUserName")
+);]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
@@ -86,8 +81,8 @@ values (
     <mapping file-url="file://$PROJECT_DIR$/Data/CreateSharedToDoList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
     <mapping file-url="file://$PROJECT_DIR$/Data/CreateUser.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
     <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/selectAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/deleteAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
     <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/updatePassword.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/deleteAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
   </component>
   <component name="DBNavigator.Project.MethodExecutionManager">
     <method-browser />
@@ -599,12 +594,12 @@ values (
   <component name="DBNavigator.Project.StatementExecutionManager">
     <execution-variables>
       <file file-url="db://448a0c41-8f65-4751-a66b-1a8c83e8e9f6/consoles/Heroku">
-        <variable name=":fdToDoListID" dataType="LITERAL" values="1" />
         <variable name=":fdCaption" dataType="LITERAL" values="test 1" />
         <variable name=":fdDateCreate" dataType="LITERAL" values="2019-03-03 21:19:00 +01:00, 2019-03-03 22:19:00 +01:00" />
         <variable name=":fdUserID" dataType="LITERAL" values="3" />
-        <variable name=":fdDateDue" dataType="LITERAL" values="2019-03-03 21:19:00 +03:00, 2019-03-03 22:19:00 +01:00" />
         <variable name=":fdListItemID" dataType="LITERAL" values="2, 1, 11, 10, 9, 8, 7, 6, 5, 4, 3" />
+        <variable name=":fdDateDue" dataType="LITERAL" values="2019-03-03 21:19:00 +03:00, 2019-03-03 22:19:00 +01:00" />
+        <variable name=":fdToDoListID" dataType="LITERAL" values="1" />
         <variable name=":fdDateDone" dataType="LITERAL" values="2012-08-24 22:00:00, 2019-03-03 21:19:00 +02:00, 2019-03-03 22:19:00 +01:00" />
       </file>
     </execution-variables>
