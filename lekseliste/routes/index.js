@@ -1,14 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const pg =require('../API/JavaScript/pgdatabase');
-const auth = require('../API/JavaScript/auth');
-const pathPublic = path.join(__dirname,"../public");
+const pg =require('../API/JavaScript/libpgdatabase');
+const auth = require('../API/JavaScript/libauth');
+const pathHTML = path.join(__dirname,"../API/HTML");
 
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
-  res.sendFile(pathPublic + "/welcome.html");
+  res.sendFile(pathHTML + "/welcome.html");
+});
+
+router.get('/index', async function(req, res, next) {
+  res.redirect('/');
 });
 
 router.post('/login', async function (req,res,next) {
