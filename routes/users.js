@@ -9,6 +9,7 @@ const pathSQL = path.join(__dirname, "../DATA/tblUser/");
 const fs = require('fs');
 const insertAll = fs.readFileSync(pathSQL + 'insertAll.sql', 'utf8');
 const selectAll = fs.readFileSync(pathSQL + 'selectAll.sql', 'utf8');
+const selectByUserID = fs.readFileSync(pathSQL + 'selectByUserID.sql', 'utf8');
 const updateUserName = fs.readFileSync(pathSQL + 'updateUserName.sql', 'utf8');
 const updatePassword = fs.readFileSync(pathSQL + 'updatePassword.sql', 'utf8');
 const deleteAll = fs.readFileSync(pathSQL + 'deleteAll.sql', 'utf8');
@@ -40,7 +41,12 @@ router.post('/create', async function (req, res, next) {
 router.post('/read', async function (req, res, next) {
     libREST.post(
         async function () {
-            return await pg.select(selectAll);
+            if(req.body.fdUserID === undefined){
+                return await pg.select(selectAll);
+            }else{
+                const params = [req.body.fdUserID];
+                return await pg.select(selectByUserID, params);
+            }
         }, req, res, next
     ).then();
 });
@@ -54,7 +60,14 @@ router.post('/updateusername', async function (req, res, next) {
                 req.body.fdUserID,
                 req.body.fdUserName
             ];
-            return await pg.select(updateUserName, params);
+            const result = await pg.update(updateUserName, params);
+            if(result.err !== undefined){
+                if(result.err.message.includes("tblUser_unique")){
+                    result.err = undefined;
+                    result.rows = "User name is not unique";
+                }
+            }
+            return result;
         }, req, res, next
     ).then();
 });
@@ -68,7 +81,7 @@ router.post('/updatepassword', async function (req, res, next) {
                 req.body.fdUserID,
                 req.body.fdPassword
             ];
-            return await pg.select(updatePassword, params);
+            return await pg.update(updatePassword, params);
         }, req, res, next
     ).then();
 });

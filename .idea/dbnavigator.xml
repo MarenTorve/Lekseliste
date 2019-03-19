@@ -26,28 +26,14 @@
     <loaded-nodes>
       <connection connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
         <schema name="pg_catalog" object-types="table, function, view" />
-        <schema name="public" object-types="table, function, view, column" />
+        <schema name="public" object-types="column, dataset trigger, table, constraint, function, index, sequence, view" />
       </connection>
     </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
-      <console name="Heroku" type="STANDARD" schema="public" session="Pool">Select NOW() as fdNow;insert into &quot;tblListItem&quot; (
-    &quot;fdListItemID&quot;,
-    &quot;fdToDoListID&quot;,
-    &quot;fdUserID&quot;,
-    &quot;fdCaption&quot;,
-    &quot;fdDateCreate&quot;,
-    &quot;fdDateDone&quot;,
-    &quot;fdDateDue&quot;)
-values (
-    :fdListItemID,
-    :fdToDoListID,
-    :fdUserID,
-    :fdCaption,
-    current_timestamp,
-    :fdDateDone,
-    (SELECT Now() as dateNow));</console>
+      <console name="Heroku" type="STANDARD" schema="public" session="Pool">DELETE FORM &quot;tblListItem&quot;
+WHERE &quot;fdListItemID&quot; = $1 AND &quot;fdToDoListID&quot; = $2 AND &quot;fdUserID&quot; = $3;</console>
       <console name="Heroku 1" type="STANDARD" schema="" session="Main">CREATE TABLE public.&quot;tblUser&quot;
 (
     &quot;fdUserID&quot; SMALLSERIAL NOT NULL,
@@ -81,13 +67,14 @@ values (
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.FileConnectionMappingManager">
-    <mapping file-url="file://$PROJECT_DIR$/Data/CreateListItem.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/insertAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/CreateSharedToDoList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/CreateUser.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/selectAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
     <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/updatePassword.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/selectAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
     <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/deleteAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/CreateUser.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/selectByUserID.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/CreateSharedToDoList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/insertAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/CreateListItem.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
   </component>
   <component name="DBNavigator.Project.MethodExecutionManager">
     <method-browser />
@@ -599,12 +586,12 @@ values (
   <component name="DBNavigator.Project.StatementExecutionManager">
     <execution-variables>
       <file file-url="db://448a0c41-8f65-4751-a66b-1a8c83e8e9f6/consoles/Heroku">
+        <variable name=":fdToDoListID" dataType="LITERAL" values="1" />
         <variable name=":fdCaption" dataType="LITERAL" values="test 1" />
         <variable name=":fdDateCreate" dataType="LITERAL" values="2019-03-03 21:19:00 +01:00, 2019-03-03 22:19:00 +01:00" />
         <variable name=":fdUserID" dataType="LITERAL" values="3" />
-        <variable name=":fdListItemID" dataType="LITERAL" values="2, 1, 11, 10, 9, 8, 7, 6, 5, 4, 3" />
         <variable name=":fdDateDue" dataType="LITERAL" values="2019-03-03 21:19:00 +03:00, 2019-03-03 22:19:00 +01:00" />
-        <variable name=":fdToDoListID" dataType="LITERAL" values="1" />
+        <variable name=":fdListItemID" dataType="LITERAL" values="2, 1, 11, 10, 9, 8, 7, 6, 5, 4, 3" />
         <variable name=":fdDateDone" dataType="LITERAL" values="2012-08-24 22:00:00, 2019-03-03 21:19:00 +02:00, 2019-03-03 22:19:00 +01:00" />
       </file>
     </execution-variables>

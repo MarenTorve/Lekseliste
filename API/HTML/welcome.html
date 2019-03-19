@@ -1,168 +1,178 @@
 <html lang="nb">
 
 <head>
-  <title>Lekseliste</title>
-  <link rel="stylesheet" href="/stylesheets/style.css">
-  <script src="/JavaScript/lib.js"></script>
+    <title>Lekseliste</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="/JavaScript/lib.js"></script>
 </head>
 
 <body>
-  <h1 onclick="navToToDoList()" style="color: blue; cursor: pointer">LEKSELISTE</h1>
-  <p>Welcome</p>
-  <div id="divShowTemplate">
+<h1 onclick="navToToDoList()" style="color: blue; cursor: pointer">LEKSELISTE</h1>
+<div id="divShowTemplate">
 
-  </div>
+</div>
 
-  <div>
+<div>
     <span id="txtInfoFromServer"></span>
-  </div>
+</div>
 
-  <template id="templateLogin">
+<template id="templateLogin">
     <fieldset>
-      <legend>Login: </legend>
-      <label for="txtUserName">Brukernavn: </label>
-      <input type="text" id="txtUserName" name="fdUserName">
-      <br />
-      <label for="txtPassword">Passord: </label>
-      <input type="password" id="txtPassword" name="fdPassword">
-      <br />
-      <button onclick="restLogin().then()">Login</button>
+        <legend>Login:</legend>
+        <label for="txtUserName">Brukernavn: </label>
+        <input type="text" id="txtUserName" name="fdUserName">
+        <br/>
+        <label for="txtPassword">Passord: </label>
+        <input type="password" id="txtPassword" name="fdPassword">
+        <br/>
+        <button onclick="restLogin().then()">Login</button>
     </fieldset>
-  </template>
-  <template id="templateLogout">
+</template>
+
+<template id="templateLogout">
+    <span onclick="navUserPage()">Min side</span>
+    <br/>
     <button onclick="logout()">Logg ut</button>
     <button onclick="restDeleteUser().then()">Slett meg!</button>
-  </template>
 
 
-  <template id="templateNewUser">
+</template>
+
+
+<template id="templateNewUser">
     <fieldset>
-      <legend>Ny Bruker </legend>
+        <legend>Ny Bruker</legend>
 
-      <label for="txtNewUserName">Brukernavn: </label>
-      <input type="text" id="txtNewUserName" name="fdUserName">
-      <br />
+        <label for="txtNewUserName">Brukernavn: </label>
+        <input type="text" id="txtNewUserName" name="fdUserName">
+        <br/>
 
-      <label for="txtNewPassword">Passord: </label>
-      <input type="password" id="txtNewPassword" name="fdPassword">
+        <label for="txtNewPassword">Passord: </label>
+        <input type="password" id="txtNewPassword" name="fdPassword">
 
-      <label for="txtConfirmPassword">Bekreft Passord: </label>
-      <input type="password" id="txtConfirmPassword" name="fdPassword">
-      <br />
-      <button onclick="restNewUser().then()">Registrer</button>
+        <label for="txtConfirmPassword">Bekreft Passord: </label>
+        <input type="password" id="txtConfirmPassword" name="fdPassword">
+        <br/>
+        <button onclick="restNewUser().then()">Registrer</button>
     </fieldset>
-  </template>
+</template>
 
 
-  <!-- Programmerer på klientsiden JavaScript-->
+<!-- Programmerer på klientsiden JavaScript-->
 <script>
-  //global DOM (document object model) elementer
-  let txtUserName;
-  let txtPassword;
-  let txtInfoFromServer;
-  let formGetHtmlPage;
-  let txtNewUserName;
-  let txtNewPassword;
-  let txtConfirmPassword;
+    //global DOM (document object model) elementer
+    let txtUserName;
+    let txtPassword;
+    let txtInfoFromServer;
+    let formGetHtmlPage;
+    let txtNewUserName;
+    let txtNewPassword;
+    let txtConfirmPassword;
 
-  const token = localStorage.getItem('token');
-  const fdUserID = localStorage.getItem('fdUserID');
+    const token = localStorage.getItem('token');
+    const fdUserID = localStorage.getItem('fdUserID');
 
-  //Venter til hele nettsiden er lastet slik at alle elementer er på plass
-  window.onload = function (){
-      //henter felter fra HTML (DOM)
-      txtInfoFromServer = document.getElementById("txtInfoFromServer");
-      formGetHtmlPage = document.getElementById("formGetHtmlPage");
+    //Venter til hele nettsiden er lastet slik at alle elementer er på plass
+    window.onload = function () {
+        //henter felter fra HTML (DOM)
+        txtInfoFromServer = document.getElementById("txtInfoFromServer");
+        formGetHtmlPage = document.getElementById("formGetHtmlPage");
 
-      if((token) && (fdUserID)){
-        const c = getTemplateContent("templateLogout");
-        showContent(c,"divShowTemplate");
+        if ((token) && (fdUserID)) {
+            const c = getTemplateContent("templateLogout");
+            showContent(c, "divShowTemplate");
 
-      }else{
-        let c = getTemplateContent("templateLogin");
-        showContent(c,"divShowTemplate");
-        txtUserName = document.getElementById("txtUserName");
-        txtPassword = document.getElementById("txtPassword");
-        txtPassword.addEventListener("keydown", enterKeyPressed, false);
+        } else {
+            let c = getTemplateContent("templateLogin");
+            showContent(c, "divShowTemplate");
+            txtUserName = document.getElementById("txtUserName");
+            txtPassword = document.getElementById("txtPassword");
+            txtPassword.addEventListener("keydown", enterKeyPressed, false);
 
-        c = getTemplateContent("templateNewUser");
-        showContent(c, "divShowTemplate");
-        txtNewUserName = document.getElementById("txtNewUserName");
-        txtNewPassword = document.getElementById("txtNewPassword");
-        txtConfirmPassword = document.getElementById("txtConfirmPassword");
-      }
-  };
-
-  async function restLogin() {
-    let data = {
-      fdUserName: txtUserName.value,
-      fdPassword: txtPassword.value
-    };
-    const json = await RestAPI("POST","/login",data);
-    if(json !== null){
-      localStorage.setItem('token',json.token);
-      localStorage.setItem('fdUserID', json.fdUserID);
-      formLoadPage("/todolist",
-        {token: json.token, fdUserID: json.fdUserID}
-      );
-    }
-  }
-
-
-  async function restNewUser() {
-    if(isConfirmPasswordOK() === false){
-      txtConfirmPassword.style.backgroundColor = "red";
-      return;
-    }
-    txtConfirmPassword.style.backgroundColor = "white";
-    const data = {
-      fdUserName: txtNewUserName.value,
-      fdPassword: txtNewPassword.value,
+            c = getTemplateContent("templateNewUser");
+            showContent(c, "divShowTemplate");
+            txtNewUserName = document.getElementById("txtNewUserName");
+            txtNewPassword = document.getElementById("txtNewPassword");
+            txtConfirmPassword = document.getElementById("txtConfirmPassword");
+        }
     };
 
-    const json = await RestAPI("POST", "/users/create",data);
-    if(json === null){
-      //TODO: OOOPS fikk ikke laget ny bruker!!!
-    }
-  }
-
-  async function restDeleteUser() {
-    const data ={
-      token: token,
-      fdUserID: fdUserID
-    };
-
-    const json = await RestAPI("POST", "/users/delete",data);
-    if(json === null){
-      //TODO: OOOPS fikk ikke slettet bruker!!!
-    }else{
-      logout();
+    async function restLogin() {
+        let data = {
+            fdUserName: txtUserName.value,
+            fdPassword: txtPassword.value
+        };
+        const json = await RestAPI("POST", "/login", data);
+        if (json !== null) {
+            localStorage.setItem('token', json.token);
+            localStorage.setItem('fdUserID', json.fdUserID);
+            formLoadPage("/todolist",
+                {token: json.token, fdUserID: json.fdUserID}
+            );
+        }
     }
 
-  }
 
-  function isConfirmPasswordOK() {
-    return txtNewPassword.value === txtConfirmPassword.value;
-  }
+    async function restNewUser() {
+        if (isConfirmPasswordOK() === false) {
+            txtConfirmPassword.style.backgroundColor = "red";
+            return;
+        }
+        txtConfirmPassword.style.backgroundColor = "white";
+        const data = {
+            fdUserName: txtNewUserName.value,
+            fdPassword: txtNewPassword.value,
+        };
 
-  function logout(){
-    localStorage.removeItem('token');
-    localStorage.removeItem('fdUserID');
-    location.reload();
-  }
-
-  function navToToDoList(){
-    formLoadPage("/todolist",
-      {token: token, fdUserID: fdUserID}
-    );
-  }
-
-  function enterKeyPressed(evt) {
-    evt = evt || window.event;
-    if (evt.key === "Enter") {
-      restLogin().then();
+        const json = await RestAPI("POST", "/users/create", data);
+        if (json === null) {
+            //TODO: OOOPS fikk ikke laget ny bruker!!!
+        }
     }
-  }
+
+    async function restDeleteUser() {
+        const data = {
+            token: token,
+            fdUserID: fdUserID
+        };
+
+        const json = await RestAPI("POST", "/users/delete", data);
+        if (json === null) {
+            //TODO: OOOPS fikk ikke slettet bruker!!!
+        } else {
+            logout();
+        }
+
+    }
+
+    function isConfirmPasswordOK() {
+        return txtNewPassword.value === txtConfirmPassword.value;
+    }
+
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('fdUserID');
+        location.reload();
+    }
+
+    function navToToDoList() {
+        formLoadPage("/todolist",
+            {token: token, fdUserID: fdUserID}
+        );
+    }
+
+    function navUserPage() {
+        formLoadPage("/users",
+            {token: token, fdUserID: fdUserID}
+        );
+    }
+
+    function enterKeyPressed(evt) {
+        evt = evt || window.event;
+        if (evt.key === "Enter") {
+            restLogin().then();
+        }
+    }
 
 </script>
 
