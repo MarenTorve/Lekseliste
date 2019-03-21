@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="nb">
 <head>
-    <meta charset="UTF-8">
-    <title>Min side</title>
-    <link rel="stylesheet" href="/stylesheets/style.css">
-    <script src="/JavaScript/lib.js"></script>
-    <script src="/JavaScript/libModal.js"></script>
+  <meta charset="UTF-8">
+  <title>Min side</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <script src="/JavaScript/lib.js"></script>
+  <script src="/JavaScript/libModal.js"></script>
 </head>
 <body>
 <h1>Min side</h1>
@@ -20,73 +20,113 @@
 <input id="txtConfirmPassword" type="password">
 <button onclick="restChangePassword().then()">🔧</button>
 <hr>
-<h2>Mine delte lister...</h2>
+<h2>Delte lister</h2>
+<table>
+  <tr>
+    <th>Bruker</th>
+    <th class="hidden">fdToDoListID</th>
+    <th class="hidden">fdUserID</th>
+    <th>Beskrivelse</th>
+    <th>Følger</th>
+  </tr>
+  <tbody id="htmlTBodySharedToDoList">
+
+  </tbody>
+</table>
+<template id="templateSharedToDoListRow">
+  <tr>
+    <td></td>
+    <td class="hidden"></td>
+    <td class="hidden"></td>
+    <td></td>
+    <td></td>
+  </tr>
+</template>
 
 <script>
-    const token = localStorage.getItem("token");
-    const fdUserID = localStorage.getItem("fdUserID");
+  const token = localStorage.getItem("token");
+  const fdUserID = localStorage.getItem("fdUserID");
 
-    let txtUserName;
-    let txtPassword;
-    let txtConfirmPassword;
-    let modalWindow = null;
+  let txtUserName;
+  let txtPassword;
+  let txtConfirmPassword;
+  let modalWindow = null;
+  let htmlTBodySharedToDoList;
 
-    window.onload = function () {
-        txtUserName = document.getElementById("txtUserName");
-        txtPassword = document.getElementById("txtPassword");
-        txtConfirmPassword = document.getElementById("txtConfirmPassword");
-        restGetUserInfo().then();
-        modalWindow = new TModalWindow("Dette er en test", EModalState.Normal, EModalButtons.OKCancel);
-        modalWindow.showModal(function (aStatus) {
-            alert("Bruker klikket på " + aStatus);
-        });
+  window.onload = function () {
+    txtUserName = document.getElementById("txtUserName");
+    txtPassword = document.getElementById("txtPassword");
+    txtConfirmPassword = document.getElementById("txtConfirmPassword");
+    htmlTBodySharedToDoList = document.getElementById("htmlTBodySharedToDoList");
+    restGetUserInfo().then();
+    restGetSharedToDoList().then();
+  };
 
+  async function restGetUserInfo() {
+    const data = {
+      token: token,
+      fdUserID: fdUserID
     };
-
-    async function restGetUserInfo() {
-        const data = {
-            token: token,
-            fdUserID: fdUserID
-        };
-        const result = await RestAPI("post", "/users/read", data);
-        if (Array.isArray(result) === true) {
-            txtUserName.value = result[0].fdUserName;
-            txtPassword.value = result[0].fdPassword;
-        }
+    const result = await RestAPI("post", "/users/read", data);
+    if (Array.isArray(result) === true) {
+      txtUserName.value = result[0].fdUserName;
+      txtPassword.value = result[0].fdPassword;
     }
+  }
 
-    async function restChangeUserName() {
-        const data = {
-            token: token,
-            fdUserID: fdUserID,
-            fdUserName: txtUserName.value
-        };
-        let result = await RestAPI("post", "/users/updateusername", data);
-        if (Array.isArray(result) === false) {
-            //  showModalDialog("Brukernavnet er allerede i bruk!", E)
-        }
+  async function restGetSharedToDoList() {
+    const data = {
+      token: token,
+      fdUserID: fdUserID
+    };
+    const result = await restAPI("post", "/users/readsharedtodolist", data)
+    if (Array.isArray(result) === true) {
+      htmlTBodyToDoList.innerHTML = "";
+      for (let i = 0; i < result.length; i++) {
+        let htmlRow = getTemplateContent("templateSharedToDoListRow");
+        const htmlTDs = htmlRow.querySelectorAll("td");
+        htmlTDs[0].innerText = result[i].fdUserName;
+        htmlTDs[1].innerText = result[i].fdToDoListID;
+        htmlTDs[2].innerText = result[i].fdUserID;
+        htmlTDs[3].innerText = result[i].fdCaption;
+        htmlTDs[4].innerText = result[i].fdFollow;
+      }
     }
+  }
+  async function restChangeUserName() {
+    const data = {
+      token: token,
+      fdUserID: fdUserID,
+      fdUserName: txtUserName.value
+    };
+    let result = await RestAPI("post", "/users/updateusername", data);
+    if (Array.isArray(result) === false) {
+      modalWindow = new TModalWindow("Brukernavnet finnes fra før", EModalState.Error, EModalButtons.OK);
+      modalWindow.showModal(null);
+    }
+  }
 
-    async function restChangePassword() {
-        if (isConfirmPasswordOK() === false) {
-            txtConfirmPassword.style.backgroundColor = "red";
-            return;
-        }
-        txtConfirmPassword.style.backgroundColor = "white";
-        const data = {
-            token: token,
-            fdUserID: fdUserID,
-            fdPassword: txtPassword.value
-        };
-        let result = await RestAPI("post", "/users/updatepassword", data);
-        if (result !== null) {
-            //TODO: obs kan ikke endre passord
-        }
+  async function restChangePassword() {
+    if (isConfirmPasswordOK() === false) {
+      txtConfirmPassword.style.backgroundColor = "red";
+      return;
     }
+    txtConfirmPassword.style.backgroundColor = "white";
+    const data = {
+      token: token,
+      fdUserID: fdUserID,
+      fdPassword: txtPassword.value
+    };
+    let result = await RestAPI("post", "/users/updatepassword", data);
+    if (Array.isArray(result) === false) {
+      modalWindow = new TModalWindow("Kunne ikke endre passord", EModalState.Error, EModalButtons.OK);
+      modalWindow.showModal(null);
+    }
+  }
 
-    function isConfirmPasswordOK() {
-        return txtPassword.value === txtConfirmPassword.value;
-    }
+  function isConfirmPasswordOK() {
+    return txtPassword.value === txtConfirmPassword.value;
+  }
 
 </script>
 </body>

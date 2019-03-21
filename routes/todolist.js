@@ -11,6 +11,7 @@ const insertAll = fs.readFileSync(pathSQL + 'insertAll.sql', 'utf8');
 const selectAll = fs.readFileSync(pathSQL + 'selectAll.sql', 'utf8');
 const updateAll = fs.readFileSync(pathSQL + 'updateAll.sql', 'utf8');
 const deleteAll = fs.readFileSync(pathSQL + 'deleteAll.sql', 'utf8');
+const updateShared = fs.readFileSync(pathSQL + 'updateShared.sql', 'utf8');
 
 
 
@@ -63,6 +64,22 @@ router.post('/update', async function(req, res, next) {
         req.body.fdCaption
       ];
       return await pg.select(updateAll,params);
+    },req, res, next
+  ).then();
+});
+
+//Oppdaterer om listen kan deles(SQL-Data)
+router.post('/updateshared', async function(req, res, next) {
+  req.body.fdToDoListID = parseInt(req.body.fdToDoListID);
+  req.body.fdUserID = parseInt(req.body.fdUserID);
+  libREST.post(
+    async function () {
+      const params = [
+        req.body.fdToDoListID,
+        req.body.fdUserID,
+        req.body.fdShared
+      ];
+      return await pg.select(updateShared,params);
     },req, res, next
   ).then();
 });

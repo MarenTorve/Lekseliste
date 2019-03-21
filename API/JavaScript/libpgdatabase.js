@@ -16,8 +16,10 @@ const client = new Pool(connectionData);
 exports.tblToDoList = {
   fdToDoListID: 0,
   fdUserID: 0,
-  fdCaption: ""
+  fdCaption: "",
+  fdShared: false
 };
+
 exports.tblListItem = {
   fdListItemID: 0,
   fdToDoListID: 0,
@@ -28,7 +30,7 @@ exports.tblListItem = {
   fdCaption: ""
 };
 
-exports.tblSharedToDoListList = {
+exports.tblSharedToDoList = {
   fdSharedUserID: 0,
   fdToDoListID: 0,
   fdUserID: 0,
@@ -63,7 +65,8 @@ exports.update = async function (aSql,aParams) {
   const response = {err:undefined, rows: undefined};
   try{
     await client.query('BEGIN');
-    response.rows = await client.query(aSql,aParams);
+    const {rows} = await client.query(aSql,aParams);
+    response.rows = rows;
     await client.query('COMMIT');
   }catch (e) {
     response.err = e;

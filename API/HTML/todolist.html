@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=150, initial-scale=2, user-scalable=no">
   <title>Lekselister</title>
   <script src="/JavaScript/lib.js"></script>
+  <script src="/JavaScript/libModal.js"></script>
   <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
@@ -16,8 +17,9 @@
     <tr>
       <th class="hidden">Liste ID</th>
       <th class="hidden">Bruker ID</th>
-      <th width="100%" ></th>
-      <th colspan="2" ></th>
+      <th width="100%" >Beskrivelse</th>
+      <th>Delt</th>
+      <th colspan="2" >Rediger</th>
     </tr>
     </thead>
     <tbody id="htmlTBodyToDoList">
@@ -36,6 +38,7 @@
     <td class="hidden"></td>
     <td class="hidden"></td>
     <td style="cursor: pointer; color: green;"></td>
+    <td></td>
     <td style="cursor: pointer;"></td>
     <td style="cursor: pointer;"></td>
   </tr>
@@ -77,8 +80,15 @@
             {token: token, fdToDoListID: json[i].fdToDoListID, fdUserID: fdUserID}
           );
         };
-        htmlTDs[3].innerText = "🔧";
-        htmlTDs[3].onclick = function(){
+        const checkBox = document.createElement("input");
+        checkBox.type = "checkbox";
+        checkBox.onclick = function(){
+          updateShared(json[i].fdToDoListID, checkBox).then();
+        };
+        checkBox.checked = json[i].fdShared;
+        htmlTDs[3].appendChild(checkBox);
+        htmlTDs[4].innerText = "🔧";
+        htmlTDs[4].onclick = function(){
           if(isEdit){
             return;
           }
@@ -86,8 +96,8 @@
           editRowItem(htmlTDs,json[i].fdToDoListID);
           isEdit=true;
         };
-        htmlTDs[4].innerText = "❌";
-        htmlTDs[4].onclick = function (){
+        htmlTDs[5].innerText = "❌";
+        htmlTDs[5].onclick = function (){
           deleteRowItem(json[i].fdToDoListID).then();
         };
         htmlTBodyToDoList.appendChild(htmlRow);
@@ -117,12 +127,12 @@
     htmlInput.value = fdCaption;
     htmlInput.style.width="100%";
     aRow[2].appendChild(htmlInput);
-    aRow[3].innerText = "✅";
-    aRow[3].onclick = function () {
+    aRow[4].innerText = "✅";
+    aRow[4].onclick = function () {
       postItemToServer(aListID, htmlInput.value).then();
     };
-    aRow[4].innerText = "⛔";
-    aRow[4].onclick = function () {
+    aRow[5].innerText = "⛔";
+    aRow[5].onclick = function () {
       getListFromServer().then();
     }
   }
@@ -153,6 +163,21 @@
     let json = await RestAPI(RestAPIMethod.POST, route, data);
     if(json !== null) {
       getListFromServer().then();
+    }
+  }
+
+  async function updateShared(aItemID, aCheckBox) {
+    const data = {
+      token: token,
+      fdUserID: fdUserID,
+      fdToDoListID: aItemID,
+      fdShared: aCheckBox.checked
+    };
+    const route = "todolist/updateshared";
+    const json = await RestAPI(RestAPIMethod.POST, route, data);
+    if(json === null){
+      const modalWindow = new TModalWindow("Kunne ikke endre", EModalState.Error, EModalButtons.OK);
+      modalWindow.showModal(null);
     }
   }
 

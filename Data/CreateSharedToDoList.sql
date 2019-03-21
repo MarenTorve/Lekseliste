@@ -1,11 +1,14 @@
-create table "tblSharedToDoListList"
+CREATE TABLE "tblSharedToDoList"
 (
-	"fdSharedUserID"  integer not null,
-	"fdToDoListID"    integer not null,
-	"fdUserID"        integer not null,
-	"fdCaption"       text,
-	constraint "tblSharedList_pkey"
-		primary key ("fdSharedUserID", "fdToDoListID", "fdUserID"),
-	constraint "tblSharedList_fkey"
-		foreign key ("fdToDoListID", "fdUserID") references "tblToDoList"
+    "fdSharedUserID" integer NOT NULL,
+    "fdToDoListID" integer NOT NULL,
+    "fdUserID" integer NOT NULL,
+    "fdCaption" text,
+    constraint "tblSharedToDoList_pkey"
+        primary key ("fdSharedUserID", "fdToDoListID", "fdUserID"),
+    constraint "tblSharedToDoList_fkey"
+        foreign key ("fdSharedUserID", "fdToDoListID") references "tblToDoList"("fdUserID","fdToDoListID"),
+    constraint "tblUser_fkey"
+        foreign key ("fdUserID") references "tblUser"
+
 );
