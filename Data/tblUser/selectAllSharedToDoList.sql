@@ -1,7 +1,7 @@
 select
     "tblUser"."fdUserName",
-    "tblSharedToDoList"."fdSharedUserID",
-    "tblSharedToDoList"."fdToDoListID",
+    "tblToDoList"."fdToDoListID",
+    "tblToDoList"."fdUserID",
     "tblToDoList"."fdCaption",
     "tblSharedToDoList"."fdUserID" is not null  and "tblSharedToDoList"."fdUserID" = $1 as "fdFollow"
   from "tblToDoList"

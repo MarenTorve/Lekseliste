@@ -14,6 +14,8 @@ const updateUserName = fs.readFileSync(pathSQL + 'updateUserName.sql', 'utf8');
 const updatePassword = fs.readFileSync(pathSQL + 'updatePassword.sql', 'utf8');
 const deleteAll = fs.readFileSync(pathSQL + 'deleteAll.sql', 'utf8')
 const selectAllSharedToDoList = fs.readFileSync(pathSQL + 'selectAllSharedToDoList.sql', 'utf8');
+const insertSharedToDoList = fs.readFileSync(pathSQL + 'insertSharedToDoList.sql', 'utf8');
+const deleteSharedToDoList = fs.readFileSync(pathSQL + 'deleteSharedToDoList.sql', 'utf8');
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
@@ -36,6 +38,21 @@ router.post('/create', async function (req, res, next) {
     }
     res.status(200).json(result.rows).end();
 
+});
+
+//Lager ny liste abbonent sql-data
+router.post('/createsharedtodolist', async function (req, res, next) {
+  libREST.post(
+    async function (){
+      const params = [
+        parseInt(req.body.fdSharedUserID),
+        parseInt(req.body.fdToDoListID),
+        parseInt(req.body.fdUserID),
+        req.body.fdCaption
+      ];
+      return await pg.insert(insertSharedToDoList, params);
+    }, req, res, next
+  ).then();
 });
 
 //Henter sql-data
@@ -120,4 +137,19 @@ router.post('/delete', async function (req, res, next) {
         }, req, res, next
     ).then();
 });
+
+//Sletter listeabbonent
+router.post('/deletesharedtodolist', async function (req, res, next) {
+  libREST.post(
+    async function (){
+      const params = [
+        parseInt(req.body.fdSharedUserID),
+        parseInt(req.body.fdToDoListID),
+        parseInt(req.body.fdUserID)
+      ];
+      return await pg.insert(deleteSharedToDoList, params);
+    }, req, res, next
+  ).then();
+});
+
 module.exports = router;

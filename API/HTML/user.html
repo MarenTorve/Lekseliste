@@ -95,11 +95,28 @@
         }else{
           htmlTDs[4].innerText ="🖤";
         }
+        htmlTDs[4].onclick = async function() {
+          await toggleFollow(htmlTDs[4], result[i]);
+        };
         htmlTBodySharedToDoList.appendChild(htmlRow);
       }
-
     }
   }
+  async function toggleFollow(aTD, aRowItem){
+    const data = {
+      token: token,
+      fdUserID: fdUserID,
+      fdSharedUserID: aRowItem.fdUserID,
+      fdToDoListID: aRowItem.fdToDoListID
+    };
+    let route = "/users/createsharedtodolist";
+    if(aRowItem.fdFollow){
+      route = "users/deletesharedtodolist";
+    }
+    const result = await RestAPI("post", route, data);
+    await restGetSharedToDoList();
+  }
+
   async function restChangeUserName() {
     const data = {
       token: token,

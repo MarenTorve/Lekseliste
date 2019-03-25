@@ -10,5 +10,4 @@ CREATE TABLE "tblSharedToDoList"
         foreign key ("fdSharedUserID", "fdToDoListID") references "tblToDoList"("fdUserID","fdToDoListID"),
     constraint "tblUser_fkey"
         foreign key ("fdUserID") references "tblUser"
-
 );
