@@ -79,9 +79,9 @@
       token: token,
       fdUserID: fdUserID
     };
-    const result = await restAPI("post", "/users/readsharedtodolist", data)
+    const result = await RestAPI("post", "/users/readsharedtodolist", data)
     if (Array.isArray(result) === true) {
-      htmlTBodyToDoList.innerHTML = "";
+      htmlTBodySharedToDoList.innerHTML = "";
       for (let i = 0; i < result.length; i++) {
         let htmlRow = getTemplateContent("templateSharedToDoListRow");
         const htmlTDs = htmlRow.querySelectorAll("td");
@@ -90,7 +90,14 @@
         htmlTDs[2].innerText = result[i].fdUserID;
         htmlTDs[3].innerText = result[i].fdCaption;
         htmlTDs[4].innerText = result[i].fdFollow;
+        if(result[i].fdFollow){
+          htmlTDs[4].innerText ="🧡";
+        }else{
+          htmlTDs[4].innerText ="🖤";
+        }
+        htmlTBodySharedToDoList.appendChild(htmlRow);
       }
+
     }
   }
   async function restChangeUserName() {

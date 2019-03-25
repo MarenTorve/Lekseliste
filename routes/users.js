@@ -13,7 +13,7 @@ const selectByUserID = fs.readFileSync(pathSQL + 'selectByUserID.sql', 'utf8');
 const updateUserName = fs.readFileSync(pathSQL + 'updateUserName.sql', 'utf8');
 const updatePassword = fs.readFileSync(pathSQL + 'updatePassword.sql', 'utf8');
 const deleteAll = fs.readFileSync(pathSQL + 'deleteAll.sql', 'utf8')
-const selectAllSharedToDoList = fs.readFileSync(pathSQL + 'selectAllSharedToDoList.sql, utf8');
+const selectAllSharedToDoList = fs.readFileSync(pathSQL + 'selectAllSharedToDoList.sql', 'utf8');
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
@@ -56,12 +56,8 @@ router.post('/read', async function (req, res, next) {
 router.post('/readsharedtodolist', async function (req, res, next) {
   libREST.post(
     async function () {
-        const params = [req.body.fdUserID];
-        const result = await pg.select(selectAllSharedToDoList, params);
-        for(let row = 0; row < result.rows.length; row++){
-          result.rows[row].fdFollow = false;
-        }
-        return result;
+        const params = [parseInt(req.body.fdUserID)];
+        return await pg.select(selectAllSharedToDoList, params);
     }, req, res, next
   ).then();
 });

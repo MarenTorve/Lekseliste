@@ -1,4 +1,14 @@
-SELECT "tblUser"."fdUserName", "tblToDoList" .* FROM "tblToDoList"
-    INNER JOIN "tblUser" ON "tblUser"."fdUserID" = "tblToDoList"."fdUserID"
-    WHERE "fdShared" = TRUE AND "tblToDoList"."fdUserID" <> $1
-    ORDER BY "tblUser"."fdUserName";
+select
+    "tblUser"."fdUserName",
+    "tblSharedToDoList"."fdSharedUserID",
+    "tblSharedToDoList"."fdToDoListID",
+    "tblToDoList"."fdCaption",
+    "tblSharedToDoList"."fdUserID" is not null  and "tblSharedToDoList"."fdUserID" = $1 as "fdFollow"
+  from "tblToDoList"
+    inner join "tblUser" on "tblUser"."fdUserID" = "tblToDoList"."fdUserID"
+    full join "tblSharedToDoList" on
+    "tblSharedToDoList"."fdToDoListID" = "tblToDoList"."fdToDoListID" and
+    "tblSharedToDoList"."fdSharedUserID" = "tblToDoList"."fdUserID" and
+    "tblSharedToDoList"."fdUserID" = $1
+where "fdShared" = true and "tblToDoList"."fdUserID" <> $1
+order by "tblUser"."fdUserName", "tblToDoList"."fdToDoListID";

@@ -25,16 +25,29 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
-        <schema name="information_schema" object-types="function, view, table" />
-        <schema name="pg_catalog" object-types="constraint, function, view, table" />
-        <schema name="public" object-types="dataset trigger, constraint, column, function, view, table" />
+        <schema name="pg_catalog" object-types="table, function, view" />
+        <schema name="public" object-types="table, constraint, dataset trigger, function, view, column" />
       </connection>
     </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
-      <console name="Heroku" type="STANDARD" schema="" session="Main">DELETE FORM &quot;tblListItem&quot;
-WHERE &quot;fdListItemID&quot; = $1 AND &quot;fdToDoListID&quot; = $2 AND &quot;fdUserID&quot; = $3;</console>
+      <console name="Heroku" type="STANDARD" schema="" session="Main">Select NOW() as fdNow;insert into &quot;tblListItem&quot; (
+    &quot;fdListItemID&quot;,
+    &quot;fdToDoListID&quot;,
+    &quot;fdUserID&quot;,
+    &quot;fdCaption&quot;,
+    &quot;fdDateCreate&quot;,
+    &quot;fdDateDone&quot;,
+    &quot;fdDateDue&quot;)
+values (
+    :fdListItemID,
+    :fdToDoListID,
+    :fdUserID,
+    :fdCaption,
+    current_timestamp,
+    :fdDateDone,
+    (SELECT Now() as dateNow));</console>
       <console name="Heroku 1" type="STANDARD" schema="" session="Main">CREATE TABLE public.&quot;tblUser&quot;
 (
     &quot;fdUserID&quot; SMALLSERIAL NOT NULL,
@@ -52,29 +65,30 @@ WHERE &quot;fdListItemID&quot; = $1 AND &quot;fdToDoListID&quot; = $2 AND &quot;
     <connection id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-actions connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" dataset="public.tblToDoList" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" dataset="public.tblListItem" active-filter-id="">
+    <filter-list connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" dataset="public.tblToDoList" active-filter-id="EMPTY_FILTER" />
+    <filter-list connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" dataset="public.tblListItem" active-filter-id="">
       <filter id="8d79ca0e-eea8-44c4-b799-1d14784fa2d5" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
         <condition column="fdListItemID" operator="=" value="" active="true" />
       </filter>
-    </filter-actions>
+    </filter-list>
+    <filter-list connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" dataset="public.tblUser" active-filter-id="" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.FileConnectionMappingManager">
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/selectAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/CreateSharedToDoList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/insertAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/CreateToDoList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
     <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/selectAllSharedToDoList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/CreateUser.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/updatePassword.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/CreateListItem.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/deleteAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
     <mapping file-url="file://$PROJECT_DIR$/Data/createTagList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/tblToDoList/updateShared.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/CreateListItem.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/insertAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/CreateSharedToDoList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
     <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/selectByUserID.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/CreateToDoList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/CreateUser.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/selectAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/updatePassword.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/deleteAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
+    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/tblToDoList/updateShared.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
   </component>
   <component name="DBNavigator.Project.MethodExecutionManager">
     <method-browser />
@@ -111,9 +125,9 @@ WHERE &quot;fdListItemID&quot; = $1 AND &quot;fdToDoListID&quot; = $2 AND &quot;
           <port value="5432" />
           <database value="d8grr3ci9cllmn" />
           <os-authentication value="false" />
-          <empty-authentication value="false" />
+          <empty-password value="false" />
           <user value="lbngmdrxgdrbua" />
-          <deprecated-pwd value="ZDljMzFiN2E1MGNkNDYzN2E2NmJmOGEyZTllYTY0ODdlOTYxZjA1YzFkOTMyOGE1MmNjYzYwZWE5ZDYyMTU2OQ==" />
+          <password value="ZDljMzFiN2E1MGNkNDYzN2E2NmJmOGEyZTllYTY0ODdlOTYxZjA1YzFkOTMyOGE1MmNjYzYwZWE5ZDYyMTU2OQ==" />
         </database>
         <properties>
           <auto-commit value="true" />
@@ -126,7 +140,7 @@ WHERE &quot;fdListItemID&quot; = $1 AND &quot;fdToDoListID&quot; = $2 AND &quot;
           <proxy-host value="" />
           <proxy-port value="22" />
           <proxy-user value="" />
-          <deprecated-proxy-pwd value="" />
+          <proxy-password value="" />
           <auth-type value="PASSWORD" />
           <key-file value="" />
           <key-passphrase value="" />
@@ -148,7 +162,7 @@ WHERE &quot;fdListItemID&quot; = $1 AND &quot;fdToDoListID&quot; = $2 AND &quot;
           <environment-type value="default" />
           <idle-time-to-disconnect value="30" />
           <idle-time-to-disconnect-pool value="5" />
-          <credential-expiry-time value="10" />
+          <password-expiry-time value="10" />
           <max-connection-pool-size value="7" />
           <alternative-statement-delimiter value="" />
         </details>
@@ -287,11 +301,11 @@ WHERE &quot;fdListItemID&quot; = $1 AND &quot;fdToDoListID&quot; = $2 AND &quot;
         <data-length-threshold value="100" />
         <popup-delay value="1000" />
       </text-editor-popup>
-      <values-actions-popup>
+      <values-list-popup>
         <show-popup-button value="true" />
         <element-count-threshold value="1000" />
         <data-length-threshold value="250" />
-      </values-actions-popup>
+      </values-list-popup>
       <general>
         <fetch-block-size value="100" />
         <fetch-timeout value="30" />
