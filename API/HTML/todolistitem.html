@@ -74,7 +74,7 @@
     txtCaption = document.getElementById("txtCaption");
     htmlTBodyListItem = document.getElementById("htmlTBodyListItem");
     document.getElementById("txtToDoListCaption").innerText = toDoListCaption;
-    menu.addMenuItem(new TMenuItem("Mine lekser",navHome));
+    menu.addMenuItem(new TMenuItem("Mine lister",navHome));
     menu.addMenuItem(new TMenuItem("Min side", navUserPage));
     menu.addMenuItem(new TMenuItem("Logut", logout));
     document.getElementById("divMenu").appendChild(menu.asHTMLElement());
@@ -125,7 +125,7 @@
         htmlTDs[2].innerText = result[i].fdUserID.toString();
         htmlTDs[3].innerText = result[i].fdCaption;
         htmlTDs[3].onclick = function (){
-          navListItemInfo();
+          navListItemInfo(result[i]);
         };
         htmlTDs[4].innerText = formatDateToLocal(dateCreate);
         htmlTDs[5].innerText = formatDateToLocal(dateDue);

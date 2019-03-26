@@ -12,6 +12,7 @@ const selectAll = fs.readFileSync(pathSQL + 'selectAll.sql', 'utf8');
 const updateAll = fs.readFileSync(pathSQL + 'updateAll.sql', 'utf8');
 const deleteAll = fs.readFileSync(pathSQL + 'deleteAll.sql', 'utf8');
 const setItemDone = fs.readFileSync(pathSQL + 'setItemDone.sql', 'utf8');
+const selectByItemID = fs.readFileSync(pathSQL + "selectByItemID.sql","utf8");
 
 /* GET Todolist-page */
 router.get('/', async function(req, res, next) {
@@ -60,6 +61,19 @@ router.post('/read', async function(req, res, next) {
     async function () {
       const params = [req.body.fdToDoListID, req.body.fdUserID];
       return await pg.select(selectAll,params);
+    },req, res, next
+  ).then();
+});
+
+//Henter sql-data til én lekse
+router.post('/readiteminfo', async function(req, res, next) {
+  req.body.fdListItemID = parseInt(req.body.fdListItemID);
+  req.body.fdToDoListID = parseInt(req.body.fdToDoListID);
+  req.body.fdUserID = parseInt(req.body.fdUserID);
+  libREST.post(
+    async function () {
+      const params = [req.body.fdListItemID, req.body.fdToDoListID, req.body.fdUserID];
+      return await pg.select(selectByItemID,params);
     },req, res, next
   ).then();
 });

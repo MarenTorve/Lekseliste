@@ -60,11 +60,13 @@ function navListItem(aItem){
   );
 }
 
-function navListItemInfo() {
+function navListItemInfo(aItem) {
+  localStorage.setItem("fdListItemID", aItem.fdListItemID);
+  localStorage.setItem("fdToDoListID", aItem.fdToDoListID);
   formLoadPage("/todolist/listitem/iteminfo",
-      {
-        token: token, fdUserID: fdUserID}
-        );
+    {
+      token: token, fdUserID: fdUserID}
+      );
 }
 function logout() {
   localStorage.removeItem('token');

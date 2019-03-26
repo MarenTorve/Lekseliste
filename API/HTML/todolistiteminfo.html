@@ -16,7 +16,7 @@
 <table>
   <tr>
     <td>
-      <label for="txtCaption">Beskrivelse</label>
+      <label for="txtCaption">Beskrivelse: </label>
     </td>
     <td>
       <input type="text" id="txtCaption">
@@ -62,8 +62,16 @@
   const fdListItemID = localStorage.getItem('fdListItemID');
   const fdToDoListID = localStorage.getItem('fdToDoListID');
   const fdUserID = localStorage.getItem('fdUserID');
+  let txtCaption;
+  let dtpCreate;
+  let dtpDue;
+  let dtpDone;
 
   window.onload = function(){
+    txtCaption = document.getElementById("txtCaption");
+    dtpCreate = document.getElementById("dtpCreate");
+    dtpDue = document.getElementById("dtpDue");
+    dtpDone = document.getElementById("dtpDone");
     menu.addMenuItem(new TMenuItem("Mine lister",navHome));
     menu.addMenuItem(new TMenuItem("Mine lekser",function(){
       const item = {
@@ -88,9 +96,21 @@
       fdUserID: fdUserID
     };
 
-    const route = "/todolist/listitem/read";
+    const route = "/todolist/listitem/readiteminfo";
     const result = await restAPI(RestAPIMethod.POST, route, data);
     if(Array.isArray(result) === true) {
+      let tempDate;
+      txtCaption.value = result[0].fdCaption;
+      tempDate = new Date(result[0].fdDateCreate);
+      dtpCreate.value = formatDateToHTML(tempDate);
+      tempDate = new Date(result[0].fdDateDue);
+      dtpDue.value = formatDateToHTML(tempDate);
+      if(result[0].fdDateDone !== null){
+        tempDate = new Date(result[0].fdDateDone);
+        dtpDone.value = formatDateToHTML(tempDate);
+      }else{
+        dtpDone.value = "";
+      }
     }
   }
 
