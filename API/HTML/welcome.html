@@ -4,13 +4,12 @@
   <title>Lekseliste</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
   <script src="/JavaScript/lib.js"></script>
+  <script src="/JavaScript/libModal.js"></script>
+  <script src="/JavaScript/libMenu.js"></script>
 </head>
 
 <body>
-<h1 onclick="navToToDoList()" style="color: blue; cursor: pointer">LEKSELISTE</h1>
-<div id="divShowTemplate">
-
-</div>
+<div id="divShowTemplate"></div>
 
 <div>
   <span id="txtInfoFromServer"></span>
@@ -28,35 +27,21 @@
     <button onclick="restLogin().then()">Login</button>
   </fieldset>
 </template>
-
-<template id="templateLogout">
-  <span onclick="navUserPage()">Min side</span>
-  <br/>
-  <button onclick="logout()">Logg ut</button>
-  <button onclick="restDeleteUser().then()">Slett meg!</button>
-
-
-</template>
-
-
 <template id="templateNewUser">
   <fieldset>
-    <legend>Ny Bruker</legend>
-
+    <legend>Ny bruker:</legend>
     <label for="txtNewUserName">Brukernavn: </label>
     <input type="text" id="txtNewUserName" name="fdUserName">
     <br/>
-
     <label for="txtNewPassword">Passord: </label>
     <input type="password" id="txtNewPassword" name="fdPassword">
-
-    <label for="txtConfirmPassword">Bekreft Passord: </label>
+    <br/>
+    <label for="txtConfirmPassword">Bekreft passord: </label>
     <input type="password" id="txtConfirmPassword" name="fdPassword">
     <br/>
     <button onclick="restNewUser().then()">Registrer</button>
   </fieldset>
 </template>
-
 
 <!-- Programmerer på klientsiden JavaScript-->
 <script>
@@ -79,9 +64,7 @@
     formGetHtmlPage = document.getElementById("formGetHtmlPage");
 
     if ((token) && (fdUserID)) {
-      const c = getTemplateContent("templateLogout");
-      showContent(c, "divShowTemplate");
-
+      navToDoList();
     } else {
       let c = getTemplateContent("templateLogin");
       showContent(c, "divShowTemplate");
@@ -98,20 +81,21 @@
   };
 
   async function restLogin() {
-    let data = {
+    const data = {
       fdUserName: txtUserName.value,
       fdPassword: txtPassword.value
     };
-    const json = await RestAPI("POST", "/login", data);
-    if (json !== null) {
-      localStorage.setItem('token', json.token);
-      localStorage.setItem('fdUserID', json.fdUserID);
+    const result = await restAPI("POST", "/login", data);
+    if (Array.isArray(result) === true) {
+      localStorage.setItem('token', result[0].token);
+      localStorage.setItem('fdUserID', result[0].fdUserID);
       formLoadPage("/todolist",
-        {token: json.token, fdUserID: json.fdUserID}
+        {token: result[0].token, fdUserID: result[0].fdUserID}
       );
+    }else{
+      showError("feil brukernavn eller passord");
     }
   }
-
 
   async function restNewUser() {
     if (isConfirmPasswordOK() === false) {
@@ -121,50 +105,16 @@
     txtConfirmPassword.style.backgroundColor = "white";
     const data = {
       fdUserName: txtNewUserName.value,
-      fdPassword: txtNewPassword.value,
+      fdPassword: txtNewPassword.value
     };
-
-    const json = await RestAPI("POST", "/users/create", data);
-    if (json === null) {
-      //TODO: OOOPS fikk ikke laget ny bruker!!!
+    const result = await restAPI("POST", "/users/create", data);
+    if (Array.isArray(result) === false) {
+      showError("Brukernavnet finnes fra før!");
     }
-  }
-
-  async function restDeleteUser() {
-    const data = {
-      token: token,
-      fdUserID: fdUserID
-    };
-
-    const json = await RestAPI("POST", "/users/delete", data);
-    if (json === null) {
-      //TODO: OOOPS fikk ikke slettet bruker!!!
-    } else {
-      logout();
-    }
-
   }
 
   function isConfirmPasswordOK() {
     return txtNewPassword.value === txtConfirmPassword.value;
-  }
-
-  function logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('fdUserID');
-    location.reload();
-  }
-
-  function navToToDoList() {
-    formLoadPage("/todolist",
-      {token: token, fdUserID: fdUserID}
-    );
-  }
-
-  function navUserPage() {
-    formLoadPage("/users",
-      {token: token, fdUserID: fdUserID}
-    );
   }
 
   function enterKeyPressed(evt) {

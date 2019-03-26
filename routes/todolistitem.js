@@ -29,7 +29,6 @@ router.get('/', async function(req, res, next) {
 router.post('/create', async function(req, res, next) {
   req.body.fdToDoListID = parseInt(req.body.fdToDoListID);
   req.body.fdUserID = parseInt(req.body.fdUserID);
-  req.body.fdUserID = parseInt(req.body.fdUserID);
   libREST.post(async function () {
     const params = [
       req.body.fdToDoListID,

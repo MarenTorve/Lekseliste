@@ -4,13 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=150, initial-scale=2, user-scalable=no">
   <title>Lekselister</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
   <script src="/JavaScript/lib.js"></script>
   <script src="/JavaScript/libModal.js"></script>
-  <link rel="stylesheet" href="/stylesheets/style.css">
+  <script src="/JavaScript/libMenu.js"></script>
 </head>
 <body>
+<div id="divMenu"></div>
 <div class="container">
-  <span style="color: blue; cursor: pointer" onclick="navToHome()">Hjem</span>
   <h2>Mine lekser</h2>
   <table border="0" style="border-spacing: 0; width: 100%">
     <thead style="text-align: left">
@@ -27,11 +28,26 @@
   </table>
   <hr>
 </div>
-
 <div class="container">
   <label for="txtCaption" style="display: table-cell; width: 1px; white-space: nowrap;vertical-align: bottom">Ny liste:</label>
   <span style="display: table-cell; padding: 0 0 0 5px;vertical-align: bottom;width: 100%"><input type="text" id="txtCaption" style="width: 100%"></span>
   <span style="font-size: large; vertical-align: bottom;display: table-cell; padding: 0 0 0 5px" onclick="addNewList().then()">💾</span>
+</div>
+<div class="container">
+  <h3>Lister jeg følger</h3>
+  <table id="htmlTableShardToDoList" border="0" style="border-spacing: 0; width: 100%">
+    <thead style="text-align: left">
+    <tr>
+      <th>Bruker</th>
+      <th width="50%" >Beskrivelse</th>
+      <th width="50%" >Delt</th>
+      <th class="hidden">Liste ID</th>
+      <th class="hidden">Bruker ID</th>
+    </tr>
+    </thead>
+    <tbody id="htmlTBodySharedToDoList">
+    </tbody>
+  </table>
 </div>
 <template id="templateToDoListRow">
   <tr>
@@ -43,49 +59,87 @@
     <td style="cursor: pointer;"></td>
   </tr>
 </template>
+<template id="templateSharedToDoListRow">
+  <tr>
+    <td></td>
+    <td style="cursor: pointer; color: green;"></td>
+    <td></td>
+    <td class="hidden"></td>
+    <td class="hidden"></td>
+  </tr>
+</template>
+<template id="templateTableSharedToDoListItem">
+  <td colspan="5">
+    <table>
+      <thead style="text-align: left">
+      <tr>
+        <th>Lekse</th>
+        <th>Frist</th>
+      </tr>
+      </thead>
+      <tbody id="htmlTBodySharedToDoListItem">
+      </tbody>
+    </table>
+  </td>
+</template>
+<template id="templateSharedToDoListItemRow">
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+</template>
+
 <script>
   const token = localStorage.getItem('token');
   const fdUserID = localStorage.getItem('fdUserID');
   let txtCaption;
   let htmlTBodyToDoList;
+  let htmlTBodySharedToDoList;
+  let htmlTableShardToDoList;
 
-  window.onload = function () {
+  window.onload = async function () {
     txtCaption = document.getElementById("txtCaption");
     htmlTBodyToDoList = document.getElementById("htmlTBodyToDoList");
+    htmlTBodySharedToDoList = document.getElementById("htmlTBodySharedToDoList");
+    htmlTableShardToDoList = document.getElementById("htmlTableShardToDoList");
+    menu.addMenuItem(new TMenuItem("Min side", navUserPage));
+    menu.addMenuItem(new TMenuItem("Logut", logout));
+    document.getElementById("divMenu").appendChild(menu.asHTMLElement());
 
-    getListFromServer().then();
+    await getListFromServer();
+    await getSharedToDoList();
   };
 
   let isEdit = false;
   async function getListFromServer(){
-    let data = {
+    const data = {
       token: token,
       fdUserID: fdUserID,
     };
 
-    let route = "/todolist/read";
-    let json = await RestAPI(RestAPIMethod.POST, route, data);
-    if(json !== null) {
+    const route = "/todolist/read";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if(Array.isArray(result) === true) {
       htmlTBodyToDoList.innerHTML = "";
-      for(let i = 0; i < json.length; i++){
-        let htmlRow = getTemplateContent("templateToDoListRow");
+      for(let i = 0; i < result.length; i++){
+        const htmlRow = getTemplateContent("templateToDoListRow");
         const htmlTDs = htmlRow.querySelectorAll("td");
-        htmlTDs[0].innerText = json[i].fdToDoListID.toString();
-        htmlTDs[1].innerText = json[i].fdUserID.toString();
-        htmlTDs[2].innerText = json[i].fdCaption;
+        htmlTDs[0].innerText = result[i].fdToDoListID.toString();
+        htmlTDs[1].innerText = result[i].fdUserID.toString();
+        htmlTDs[2].innerText = result[i].fdCaption;
         htmlTDs[2].onclick = function(){
-          localStorage.setItem("fdToDoListID",json[i].fdToDoListID);
-          localStorage.setItem("toDoListCaption",json[i].fdCaption);
+          localStorage.setItem("fdToDoListID",result[i].fdToDoListID);
+          localStorage.setItem("toDoListCaption",result[i].fdCaption);
           formLoadPage("/todolist/listitem",
-            {token: token, fdToDoListID: json[i].fdToDoListID, fdUserID: fdUserID}
+            {token: token, fdToDoListID: result[i].fdToDoListID, fdUserID: fdUserID}
           );
         };
         const checkBox = document.createElement("input");
         checkBox.type = "checkbox";
         checkBox.onclick = function(){
-          updateShared(json[i].fdToDoListID, checkBox).then();
+          updateShared(result[i].fdToDoListID, checkBox).then();
         };
-        checkBox.checked = json[i].fdShared;
+        checkBox.checked = result[i].fdShared;
         htmlTDs[3].appendChild(checkBox);
         htmlTDs[4].innerText = "🔧";
         htmlTDs[4].onclick = function(){
@@ -93,28 +147,86 @@
             return;
           }
           htmlTDs[2].onclick = null;
-          editRowItem(htmlTDs,json[i].fdToDoListID);
+          editRowItem(htmlTDs,result[i].fdToDoListID);
           isEdit=true;
         };
         htmlTDs[5].innerText = "❌";
         htmlTDs[5].onclick = function (){
-          deleteRowItem(json[i].fdToDoListID).then();
+          confirmDeleteRowItem(result[i]);
         };
         htmlTBodyToDoList.appendChild(htmlRow);
       }
       isEdit = false;
     }
   }
+  async function getSharedToDoList(){
+    const data = {
+      token: token,
+      fdUserID: fdUserID,
+    };
+    const route = "/todolist/readsharedtodolist";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if(Array.isArray(result) === true) {
+      htmlTBodySharedToDoList.innerHTML = "";
+      for (let i = 0; i < result.length; i++) {
+        const htmlRow = getTemplateContent("templateSharedToDoListRow");
+        const htmlTDs = htmlRow.querySelectorAll("td");
+        htmlTDs[0].innerText = result[i].fdUserName;
+        htmlTDs[1].innerText = result[i].fdCaption;
+        htmlTDs[1].onclick = async function(){
+          await getSharedToDoListItems(htmlTDs[1], result[i], i);
+        };
+        htmlTDs[2].innerText = result[i].fdSharedCaption;
+        htmlTDs[3].innerText = result[i].fdToDoListID;
+        htmlTDs[4].innerText = result[i].fdSharedUserID;
+        htmlTBodySharedToDoList.appendChild(htmlRow);
+      }
+    }
+  }
+
+  async function getSharedToDoListItems(aTD, aSharedToDoList, aRowIndex){
+
+    const htmlRow = htmlTableShardToDoList.rows[aRowIndex + 2];
+    if(htmlRow.querySelector("#htmlTBodySharedToDoListItem") !== null){
+      htmlTableShardToDoList.deleteRow(aRowIndex + 2);
+      return;
+    }
+
+    const data = {
+      token: token,
+      fdToDoListID: aSharedToDoList.fdToDoListID,
+      fdUserID: aSharedToDoList.fdSharedUserID
+    };
+    const route = "todolist/listitem/read";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if(Array.isArray(result) === true) {
+      let htmlRow = htmlTableShardToDoList.insertRow(aRowIndex + 2);
+      const htmlCell = getTemplateContent("templateTableSharedToDoListItem");
+      htmlRow.appendChild(htmlCell);
+      const htmlTBodySharedToDoListItem = htmlRow.querySelector("#htmlTBodySharedToDoListItem");
+      htmlTBodySharedToDoListItem.innerHTML = "";
+      for (let i = 0; i < result.length; i++) {
+        const dateDue = new Date(result[i].fdDateDue);
+
+        htmlRow = getTemplateContent("templateSharedToDoListItemRow");
+        const htmlTDs = htmlRow.querySelectorAll("td");
+        htmlTDs[0].innerText = result[i].fdCaption;
+        htmlTDs[1].innerText = formatDateToLocal(dateDue);
+        htmlTBodySharedToDoListItem.appendChild(htmlRow);
+      }
+    }
+  }
+
   async function addNewList() {
-    let data = {
+    const data = {
       token: token,
       fdUserID: fdUserID,
       fdCaption: txtCaption.value
     };
 
-    let route = "/todolist/create";
-    let json = await RestAPI(RestAPIMethod.POST, route, data);
-    if(json !== null) {
+    const route = "/todolist/create";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if(Array.isArray(result) === true) {
       getListFromServer().then();
     }
   }
@@ -138,30 +250,43 @@
   }
 
   async function postItemToServer(aItemID, aCaption) {
-    let data = {
+    const data = {
       token: token,
       fdToDoListID: aItemID,
       fdUserID: fdUserID,
       fdCaption: aCaption
     };
 
-    let route = "/todolist/update";
-    let json = await RestAPI(RestAPIMethod.POST, route, data);
-    if(json !== null) {
+    const route = "/todolist/update";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if(Array.isArray(result) === true) {
       getListFromServer().then();
     }
   }
 
+  function confirmDeleteRowItem(aItemRow){
+    let msg = "Vil du slette liste \"" + aItemRow.fdCaption + "\"\r\n";
+    msg += "og alle elementene i denne listen?";
+    const modal = new TModalWindow(msg,EModalState.Warning,EModalButtons.OkCancel);
+    modal.showModal(
+      async function(aButton){
+        if(aButton === EModalButtons.Ok){
+          deleteRowItem(aItemRow.fdToDoListID).then();
+        }
+      }
+    );
+  }
+
   async function deleteRowItem (aItemID){
-    let data = {
+    const data = {
       token: token,
       fdToDoListID: aItemID,
       fdUserID: fdUserID
     };
 
-    let route = "/todolist/delete";
-    let json = await RestAPI(RestAPIMethod.POST, route, data);
-    if(json !== null) {
+    const route = "/todolist/delete";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if(Array.isArray(result) === true) {
       getListFromServer().then();
     }
   }
@@ -174,17 +299,10 @@
       fdShared: aCheckBox.checked
     };
     const route = "todolist/updateshared";
-    const json = await RestAPI(RestAPIMethod.POST, route, data);
-    if(json === null){
-      const modalWindow = new TModalWindow("Kunne ikke endre", EModalState.Error, EModalButtons.OK);
-      modalWindow.showModal(null);
+    const result = await restAPI(RestAPIMethod.POST,route, data);
+    if(Array.isArray(result) === false){
+      showError("Kunne ikke endre!");
     }
-  }
-
-  function navToHome() {
-    formLoadPage("/",
-      {token: token, fdUserID: fdUserID}
-    );
   }
 
 </script>

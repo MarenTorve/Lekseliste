@@ -7,7 +7,7 @@ CREATE TABLE "tblSharedToDoList"
     constraint "tblSharedToDoList_pkey"
         primary key ("fdSharedUserID", "fdToDoListID", "fdUserID"),
     constraint "tblSharedToDoList_fkey"
-        foreign key ("fdSharedUserID", "fdToDoListID") references "tblToDoList"("fdUserID","fdToDoListID"),
+      foreign key ("fdSharedUserID", "fdToDoListID") references "tblToDoList"("fdUserID","fdToDoListID"),
     constraint "tblUser_fkey"
-        foreign key ("fdUserID") references "tblUser"
+      foreign key ("fdUserID") references "tblUser"
 );

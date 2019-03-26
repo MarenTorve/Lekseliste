@@ -2,29 +2,29 @@ const RestAPIMethod = {GET: 'GET', POST: 'POST'};
 //const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
 const dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC' };
 
-async function RestAPI (aMethod, aRoute, aData){
-  const htmlBody = document.querySelector("body");
-  htmlBody.style.cursor = "wait";
-  let body = JSON.stringify(aData);
-  let headers  = {
+async function restAPI (aMethod, aRoute, aData){
+  const body = JSON.stringify(aData);
+  const headers  = {
     'Accept' : 'application/json',
     'Content-Type' : 'application/json'
   };
-  let request = {
+  const request = {
     method: aMethod, headers: headers, body: body
   };
-  let jsonResponse = await fetch(aRoute,request);
+  let error;
+
+  const jsonResponse = await fetch(aRoute,request);
   if(jsonResponse.status !== 200){
-    htmlBody.style.cursor = "default";
-    return null;
+    error = "Server feil: " + jsonResponse.status.toString();
+  }else {
+    try {
+      return await jsonResponse.json();
+    } catch (e) {
+      error = "JSON feil: " + e.message;
+    }
   }
-  try{
-    htmlBody.style.cursor = "default";
-    return await jsonResponse.json();
-  }catch (e) {
-    htmlBody.style.cursor = "default";
-    return null;
-  }
+  showError(error);
+  return error;
 }
 
 function getTemplateContent(aTemplateID){
@@ -43,11 +43,10 @@ function formatDateToLocal(aDate){
 
 // Konverterer Dato til HTML standard
 function formatDateToHTML(aDate){
-  const tzo = aDate.getTimezoneOffset();
   const dtLocal = new Date(aDate);
   dtLocal.setTime(aDate.getTime() - aDate.getTimezoneOffset()*60*1000);
   let txtDate = dtLocal.toISOString();
-  let length = txtDate.indexOf("T") + "00:00".length + 1;
+  const length = txtDate.indexOf("T") + "00:00".length + 1;
   txtDate = txtDate.substr(0,length);
   return txtDate;
 }

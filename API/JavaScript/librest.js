@@ -10,7 +10,7 @@ exports.post = async function(aWork, aReq, aRes, aNext){
   const result = await aWork();
 
   if(result.err !== undefined){
-    console.log(result.err.message);
+    console.log(result.err.stack);
     aRes.status(500).end();
     return;
   }

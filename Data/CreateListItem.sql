@@ -12,6 +12,6 @@ create table "tblListItem"
     primary key ("fdListItemID", "fdToDoListID", "fdUserID"),
   constraint "tblListItem_fkey"
     foreign key ("fdToDoListID", "fdUserID") references "tblToDoList",
-    constraint "tblTag_fkey"
-        foreign key ("fdTagID") references "tblTag"
+  constraint "tblTag_fkey"
+    foreign key ("fdTagID") references "tblTag"
 );

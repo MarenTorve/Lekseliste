@@ -34,7 +34,8 @@ exports.tblSharedToDoList = {
   fdSharedUserID: 0,
   fdToDoListID: 0,
   fdUserID: 0,
-  fdCaption: ""
+  fdSharedCaption: "",
+  fdFollow: false
 };
 
 exports.select = async function(aSql, aParams){             //eksporterer en funksjon som vi kaller for select - dette er egentlig en variabel
@@ -55,6 +56,7 @@ exports.insert = async function (aSql,aParams) {
     await client.query('BEGIN');
     response.rows = await client.query(aSql,aParams);
     await client.query('COMMIT');
+    response.rows = response.rows.rows;
   }catch (e) {
     response.err = e;
   }
@@ -68,6 +70,7 @@ exports.update = async function (aSql,aParams) {
     const {rows} = await client.query(aSql,aParams);
     response.rows = rows;
     await client.query('COMMIT');
+    response.rows = response.rows.rows;
   }catch (e) {
     response.err = e;
   }
@@ -80,6 +83,7 @@ exports.delete = async function (aSql,aParams) {
     await client.query('BEGIN');
     response.rows = await client.query(aSql,aParams);
     await client.query('COMMIT');
+    response.rows = response.rows.rows;
   }catch (e) {
     response.err = e;
   }

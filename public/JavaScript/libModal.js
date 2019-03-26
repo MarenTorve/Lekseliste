@@ -1,21 +1,22 @@
-const EModalState = { //entydig- enumvariabler - kan aldri endres
-  Normal: "lightgreen",
+const EModalState = {
+  Normal: "green",
   Warning: "yellow",
   Error: "red"
 };
 
 const EModalButtons = {
-  OK: 1,
-  OKCancel: 2
+  Ok:         1,
+  Cancel:     2,
+  OkCancel:   3
 };
 
-function TModalWindow(aMessage, aState, aButtons) { //Typedefinert
-  let functonDone = null;
+function TModalWindow(aMessage, aState, aButtons) {
+  let functionDone = null;
   const divWindow = document.createElement("div");
   const divContent = document.createElement("div");
-  const btnOK  = document.createElement("button");
+  const btnOk = document.createElement("button");
   let btnCancel = null;
-  let txtCaption = document.createElement("span");
+  const txtCaption = document.createElement("span");
   txtCaption.className = "modalWindowContentCaption";
   txtCaption.innerText = aMessage;
   divContent.appendChild(txtCaption);
@@ -23,35 +24,41 @@ function TModalWindow(aMessage, aState, aButtons) { //Typedefinert
 
   divWindow.className = "modalWindow";
   divContent.className = "modalWindowContent";
-  btnOK.innerText = "OK";
-  btnOK.onclick = buttonOKClick;
-  divContent.appendChild(btnOK);
+  btnOk.innerText = "Ok";
+  btnOk.onclick = buttonOkClick;
+  divContent.appendChild(btnOk);
 
-  if(aButtons === EModalButtons.OKCancel){
+  if(aButtons === EModalButtons.OkCancel){
     btnCancel = document.createElement("button");
     btnCancel.innerText = "Avbryt";
     btnCancel.onclick = buttonCancelClick;
     divContent.appendChild(btnCancel);
   }
+
   divContent.style.backgroundColor = aState;
   divWindow.appendChild(divContent);
 
-  function buttonOKClick(){
+  function buttonOkClick(){
     document.body.removeChild(divWindow);
-    if(functonDone !== null) {
-    }functonDone("OK");
+    if(functionDone !== null){
+      functionDone(EModalButtons.Ok);
+    }
   }
 
   function buttonCancelClick(){
     document.body.removeChild(divWindow);
-    if(functonDone !== null){
-      functonDone("Cancel");
+    if(functionDone !== null){
+      functionDone(EModalButtons.Cancel);
     }
   }
 
   this.showModal = function(aDone){
     document.body.appendChild(divWindow);
-    functonDone = aDone;
+    functionDone = aDone;
   }
+}
 
+function showError(aMessage){
+  const modal = new TModalWindow(aMessage,EModalState.Error,EModalButtons.Ok);
+  modal.showModal(null);
 }
