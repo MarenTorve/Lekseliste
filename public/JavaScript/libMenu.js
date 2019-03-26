@@ -52,6 +52,20 @@ function navToDoList() {
   );
 }
 
+function navListItem(aItem){
+  localStorage.setItem("fdToDoListID", aItem.fdToDoListID);
+  localStorage.setItem("toDoListCaption", aItem.fdCaption);
+  formLoadPage("/todolist/listitem",
+      {token: token, fdToDoListID: aItem.fdToDoListID, fdUserID: fdUserID}
+  );
+}
+
+function navListItemInfo() {
+  formLoadPage("/todolist/listitem/iteminfo",
+      {
+        token: token, fdUserID: fdUserID}
+        );
+}
 function logout() {
   localStorage.removeItem('token');
   localStorage.removeItem('fdUserID');

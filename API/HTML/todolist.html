@@ -143,11 +143,8 @@
         htmlTDs[1].innerText = result[i].fdUserID.toString();
         htmlTDs[2].innerText = result[i].fdCaption;
         htmlTDs[2].onclick = function(){
-          localStorage.setItem("fdToDoListID",result[i].fdToDoListID);
-          localStorage.setItem("toDoListCaption",result[i].fdCaption);
-          formLoadPage("/todolist/listitem",
-            {token: token, fdToDoListID: result[i].fdToDoListID, fdUserID: fdUserID}
-          );
+          navListItem(result[i]);
+
         };
         const checkBox = document.createElement("input");
         checkBox.type = "checkbox";

@@ -13,7 +13,49 @@
 <div id="divMenu"></div>
 <h2>Lekseinformasjon: </h2>
 <div class="container">
+<table>
+  <tr>
+    <td>
+      <label for="txtCaption">Beskrivelse</label>
+    </td>
+    <td>
+      <input type="text" id="txtCaption">
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <label for="dtpCreate">Opprettet:</label>
+    </td>
+    <td>
+      <input type="datetime-local" id="dtpCreate">
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <label for="dtpDue">Frist:</label>
+    </td>
+    <td>
+      <input type="datetime-local" id="dtpDue">
+    </td>
+  </tr>
+<tr>
+  <td>
+    <label for="dtpDone">Ferdig:</label>
+  </td>
+  <td>
+    <input type="datetime-local" id="dtpDone">
+  </td>
+</tr>
+  <tr>
+    <td colspan="2">
+      <button>Lagre!</button>
+    </td>
+  </tr>
+
+</table>
 </div>
+
+
 <script>
 
   const token = localStorage.getItem('token');
@@ -22,7 +64,16 @@
   const fdUserID = localStorage.getItem('fdUserID');
 
   window.onload = function(){
-    menu.addMenuItem(new TMenuItem("Mine lekser",navHome));
+    menu.addMenuItem(new TMenuItem("Mine lister",navHome));
+    menu.addMenuItem(new TMenuItem("Mine lekser",function(){
+      const item = {
+        fdListItemID: fdListItemID,
+        fdToDoListID: fdToDoListID,
+        fdUserID:  fdUserID
+      };
+      navListItem(item);
+
+    }));
     menu.addMenuItem(new TMenuItem("Min side", navUserPage));
     menu.addMenuItem(new TMenuItem("Logg ut", logout));
     document.getElementById("divMenu").appendChild(menu.asHTMLElement());
