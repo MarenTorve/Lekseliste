@@ -24,7 +24,7 @@
   <br/>
   <button onclick="confirmDeleteUser()">Slett bruker!</button>
   <hr>
-  <h2>Delete lister</h2>
+  <h2>Delte lister</h2>
   <table>
     <tr>
       <th>Bruker</th>
@@ -128,12 +128,15 @@
     const result = await restAPI("post", "/users/updateusername", data);
     if (Array.isArray(result) === false) {
       showError("Brukernavnet finnes fra før!");
+    }else{
+      showInfoMessage("Ditt brukernavn er endret");
     }
   }
 
   async function restChangePassword() {
     if (isConfirmPasswordOK() === false) {
       txtConfirmPassword.style.backgroundColor = "red";
+      showError("Bekreftet passord stemmer ikke")
       return;
     }
     txtConfirmPassword.style.backgroundColor = "white";
@@ -144,8 +147,9 @@
     };
     const result = await restAPI("post", "/users/updatepassword", data);
     if (Array.isArray(result) === false) {
-      modalWindow = new TModalWindow("Kunne ikke endre passord!", EModalState.Error, EModalButtons.Ok);
-      modalWindow.showModal(null);
+     showError("Kunne ikke endre passord!");
+    }else{
+      showInfoMessage("Ditt passord er endret");
     }
   }
 

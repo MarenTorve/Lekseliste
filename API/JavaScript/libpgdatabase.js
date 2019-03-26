@@ -70,7 +70,6 @@ exports.update = async function (aSql,aParams) {
     const {rows} = await client.query(aSql,aParams);
     response.rows = rows;
     await client.query('COMMIT');
-    response.rows = response.rows.rows;
   }catch (e) {
     response.err = e;
   }

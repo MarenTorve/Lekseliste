@@ -13,6 +13,19 @@
 <div id="divMenu"></div>
 <div class="container">
   <h2>Mine lekser</h2>
+  <div>
+    <label for="txtSearchListItem">🔎 Søk i lekser: </label>
+    <input id="txtSearchListItem" type="text">
+    <label for="selectToDoList">Velg liste: </label>
+    <select id="selectToDoList">
+      <option selected="selected">Alle lister</option>
+    </select>
+    <label for="selectTags">Velg tag: </label>
+    <select id="selectTags">
+    <option selected="selected">Alle tags</option>
+    </select>
+    <button>Søk</button>
+  </div>
   <table border="0" style="border-spacing: 0; width: 100%">
     <thead style="text-align: left">
     <tr>
@@ -96,14 +109,16 @@
   let htmlTBodyToDoList;
   let htmlTBodySharedToDoList;
   let htmlTableShardToDoList;
+  let selectToDoList;
 
   window.onload = async function () {
     txtCaption = document.getElementById("txtCaption");
     htmlTBodyToDoList = document.getElementById("htmlTBodyToDoList");
     htmlTBodySharedToDoList = document.getElementById("htmlTBodySharedToDoList");
     htmlTableShardToDoList = document.getElementById("htmlTableShardToDoList");
+    selectToDoList = document.getElementById("selectToDoList");
     menu.addMenuItem(new TMenuItem("Min side", navUserPage));
-    menu.addMenuItem(new TMenuItem("Logut", logout));
+    menu.addMenuItem(new TMenuItem("Logg ut", logout));
     document.getElementById("divMenu").appendChild(menu.asHTMLElement());
 
     await getListFromServer();
@@ -155,10 +170,17 @@
           confirmDeleteRowItem(result[i]);
         };
         htmlTBodyToDoList.appendChild(htmlRow);
+        addToDoListInSearch(result[i]);
       }
       isEdit = false;
     }
   }
+
+  function addToDoListInSearch(aItem){
+    const newOption = new Option(aItem.fdCaption, aItem.fdToDoListID, false, false);
+    selectToDoList.options.add(newOption);
+  }
+
   async function getSharedToDoList(){
     const data = {
       token: token,

@@ -110,6 +110,11 @@
     const result = await restAPI("POST", "/users/create", data);
     if (Array.isArray(result) === false) {
       showError("Brukernavnet finnes fra før!");
+    }else{
+      showInfoMessage("Ny bruker opprettet!\r\nLogg inn med ny bruker");
+      txtNewUserName.value = "";
+      txtNewPassword.value = "";
+      txtConfirmPassword.value = "";
     }
   }
 

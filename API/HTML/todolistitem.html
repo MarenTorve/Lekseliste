@@ -124,6 +124,9 @@
         htmlTDs[1].innerText = result[i].fdToDoListID.toString();
         htmlTDs[2].innerText = result[i].fdUserID.toString();
         htmlTDs[3].innerText = result[i].fdCaption;
+        htmlTDs[3].onclick = function (){
+          navListItemInfo(result[i])
+        };
         htmlTDs[4].innerText = formatDateToLocal(dateCreate);
         htmlTDs[5].innerText = formatDateToLocal(dateDue);
         if (result[i].fdDateDone === null) {

@@ -62,3 +62,8 @@ function showError(aMessage){
   const modal = new TModalWindow(aMessage,EModalState.Error,EModalButtons.Ok);
   modal.showModal(null);
 }
+
+function showInfoMessage(aMessage){
+  const modal = new TModalWindow(aMessage,EModalState.Normal, EModalButtons.Ok);
+  modal.showModal(null);
+}

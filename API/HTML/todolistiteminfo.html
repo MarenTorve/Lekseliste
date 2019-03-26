@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=150, initial-scale=1.5, user-scalable=no">
+  <title>Lekseliste</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <script src="/JavaScript/lib.js"></script>
+  <script src="/JavaScript/libModal.js"></script>
+  <script src="/JavaScript/libMenu.js"></script>
+</head>
+<body>
+<div id="divMenu"></div>
+<h2>Lekseinformasjon: </h2>
+<div class="container">
+</div>
+<script>
+
+  const token = localStorage.getItem('token');
+  const fdListItemID = localStorage.getItem('fdListItemID');
+  const fdToDoListID = localStorage.getItem('fdToDoListID');
+  const fdUserID = localStorage.getItem('fdUserID');
+
+  window.onload = function(){
+    menu.addMenuItem(new TMenuItem("Mine lekser",navHome));
+    menu.addMenuItem(new TMenuItem("Min side", navUserPage));
+    menu.addMenuItem(new TMenuItem("Logg ut", logout));
+    document.getElementById("divMenu").appendChild(menu.asHTMLElement());
+    getListItemInfoFromServer().then();
+  };
+
+  async function getListItemInfoFromServer() {
+    const data = {
+      token: token,
+      fdListItemID: fdListItemID,
+      fdToDoListID: fdToDoListID,
+      fdUserID: fdUserID
+    };
+
+    const route = "/todolist/listitem/read";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if(Array.isArray(result) === true) {
+    }
+  }
+
+</script>
+
+</body>
+</html>

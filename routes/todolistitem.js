@@ -23,6 +23,15 @@ router.get('/', async function(req, res, next) {
   }
 });
 
+router.get('/iteminfo', async function(req, res, next) {
+  req.query.fdUserID;
+  if(auth.isAuth(req.query.token)){
+    res.sendFile(pathHTML + "/todolistiteminfo.html");
+  }else{
+    res.redirect('/');
+  }
+});
+
 //CRUD --> RESTLess API bruker post
 
 //Lager nye sql-data
