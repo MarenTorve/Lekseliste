@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Lekseliste</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <script src="/JavaScript/lib.js"></script>
+  <script src="/JavaScript/libModal.js"></script>
+  <script src="/JavaScript/libMenu.js"></script>
+</head>
+<body>
+<div id="divMenu"></div>
+<h2>Lekse info:</h2>
+<div class="container">
+  <table style="max-width: 200px;">
+    <tr>
+      <td>
+        <label for="txtCaption">Beskrivelse:</label>
+      </td>
+      <td>
+        <input type="text" id="txtCaption" style="width: 99%">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="dtpCreate">Opprettet:</label>
+      </td>
+      <td>
+        <input type="datetime-local" id="dtpCreate" style="width: 99%">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="dtpDue">Frist:</label>
+      </td>
+      <td>
+        <input type="datetime-local" id="dtpDue" style="width: 99%">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="dtpDone">Ferdig:</label>
+      </td>
+      <td>
+        <input type="datetime-local" id="dtpDone" style="width: 99%">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="selectTag">Tag:</label>
+      </td>
+      <td>
+        <select id="selectTag" onchange="selectTagChange()" style="width: 100%">
+        </select>
+        <input type="text" id="txtNewTag"  style="width: 100%">
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <button onclick="saveListItemInfo().then()">Lagre!</button>
+      </td>
+    </tr>
+  </table>
+</div>
+<div class="container">
+</div>
+<script>
+  let txtCaption;
+  let dtpCreate;
+  let dtpDue;
+  let dtpDone;
+  let selectTag;
+  let txtNewTag;
+
+  window.onload = async function () {
+    txtCaption = document.getElementById("txtCaption");
+    dtpCreate = document.getElementById("dtpCreate");
+    dtpDue = document.getElementById("dtpDue");
+    dtpDone = document.getElementById("dtpDone");
+    selectTag = document.getElementById("selectTag");
+    txtNewTag = document.getElementById("txtNewTag");
+
+    menu.addMenuItem(new TMenuItem("Mine lister", navHome));
+    menu.addMenuItem(new TMenuItem("Mine lekser", navListItem));
+    menu.addMenuItem(new TMenuItem("Min side", navUserPage));
+    menu.addMenuItem(new TMenuItem("Logg ut", logout));
+    document.getElementById("divMenu").appendChild(menu.asHTMLElement());
+    await getListItemInfoFromServer();
+    selectTagChange();
+  };
+
+  async function getListItemInfoFromServer() {
+    const data = {
+      token: token,
+      fdListItemID: fdListItemID,
+      fdToDoListID: fdToDoListID,
+      fdUserID: fdUserID
+    };
+    const route = "/todolist/listitem/readiteminfo";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if (Array.isArray(result) === true) {
+      await getTagFromServer(result[0].fdTagID);
+      let tempDate;
+      txtCaption.value = result[0].fdCaption;
+      tempDate = new Date(result[0].fdDateCreate);
+      dtpCreate.value = formatDateToHTML(tempDate);
+      tempDate = new Date(result[0].fdDateDue);
+      dtpDue.value = formatDateToHTML(tempDate);
+      if(result[0].fdDateDone !== null) {
+        tempDate = new Date(result[0].fdDateDone);
+        dtpDone.value = formatDateToHTML(tempDate);
+      }else{
+        dtpDone.value = "";
+      }
+    }
+  }
+
+  async function getTagFromServer(aCurrentTagID){
+    const data = {token: token};
+    const result = await restAPI(RestAPIMethod.POST, "/todolist/listitem/readtag", data);
+    selectTag.innerHTML = "";
+    selectTag.options.add(new Option("Ny Tag",0, false,false));
+    if(Array.isArray(result) === true){
+      for(let i = 0; i < result.length; i++){
+        result[i].fdTagID = parseInt(result[i].fdTagID);
+        selectTag.options.add(new Option(result[i].fdCaption, result[i].fdTagID, false, aCurrentTagID === result[i].fdTagID));
+      }
+    }
+  }
+
+  function selectTagChange(){
+    if(selectTag.value === "0"){
+      txtNewTag.style.display = "block";
+    }else{
+      txtNewTag.style.display = "none";
+      txtNewTag.value = "";
+    }
+  }
+
+
+  async function saveListItemInfo(){
+    const dtCreate = convertDateToUTC(new Date(dtpCreate.value));
+    const dtDue = convertDateToUTC(new Date(dtpDue.value));
+    const dtDone = convertDateToUTC(new Date(dtpDone.value));
+
+    const data = {
+      token: token,
+      fdListItemID: fdListItemID,
+      fdToDoListID: fdToDoListID,
+      fdUserID: fdUserID,
+      fdCaption: txtCaption.value,
+      fdDateCreate: dtCreate,
+      fdDateDue: dtDue,
+      fdDateDone: dtDone,
+      tblTag:{
+        fdTagID: selectTag[selectTag.selectedIndex].value,
+        fdCaption: txtNewTag.value
+      }
+    };
+    const route = "/todolist/listitem/update";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if (Array.isArray(result) === true) {
+      await getListItemInfoFromServer();
+      showInfoMessage("Lekse er oppdatert!");
+    }
+  }
+
+</script>
+
+</body>
+</html>

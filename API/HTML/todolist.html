@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Lekselister</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <script src="/JavaScript/lib.js"></script>
+  <script src="/JavaScript/libModal.js"></script>
+  <script src="/JavaScript/libMenu.js"></script>
+</head>
+<body>
+<div class="container">
+  <div id="divMenu"></div>
+  <h2>Mine lekser</h2>
+  <div>
+    <table>
+      <tr>
+        <td style="white-space: nowrap">
+          <label for="txtSearchListItem">Søk i lekser:</label>
+        </td>
+        <td colspan="2" style="width: 100%;">
+          <input id="txtSearchListItem" type="text" style="width: 99%;">
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: center" rowspan="3">
+          <button style="width: 100%; height: 100%" onclick="searchListItem()">Søk!</button>
+        </td>
+      </tr>
+      <tr>
+        <td style="white-space: nowrap; width: 1px">
+          <label for="selectToDoList">Velg liste:</label>
+        </td>
+        <td style="width: 100%">
+          <select id="selectToDoList" style="width: 100%">
+            <option selected="selected">Alle lister</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="selectTags">Velg tag:</label>
+        </td>
+        <td style="width: 100%">
+          <select id="selectTags" style="width: 100%">
+            <option selected="selected">Alle tags</option>
+          </select>
+        </td>
+      </tr>
+    </table>
+    <hr>
+    <table>
+      <thead>
+      <tr>
+        <th class="hidden">Liste ID</th>
+        <th class="hidden">Bruker ID</th>
+        <th width="100%">Beskrivelse</th>
+        <th>Delt</th>
+        <th colspan="2">Rediger</th>
+      </tr>
+      </thead>
+      <tbody id="htmlTBodyToDoList">
+      </tbody>
+    </table>
+    <hr>
+    <table>
+      <tr>
+        <td style="white-space: nowrap;">
+          <label for="txtCaption">Ny liste:</label>
+        </td>
+        <td style="width:100%;">
+          <input type="text" id="txtCaption" style="width: 98%">
+        </td>
+        <td>
+          <span onclick="addNewList().then()">💾</span>
+        </td>
+      </tr>
+    </table>
+    <hr>
+    <h3>Lister jeg følger</h3>
+    <table id="htmlTableShardToDoList" border="0" style="border-spacing: 0; width: 100%">
+      <thead style="text-align: left">
+      <tr>
+        <th>Bruker</th>
+        <th width="50%">Beskrivelse</th>
+        <th width="50%">Delt</th>
+        <th class="hidden">Liste ID</th>
+        <th class="hidden">Bruker ID</th>
+      </tr>
+      </thead>
+      <tbody id="htmlTBodySharedToDoList">
+      </tbody>
+    </table>
+  </div>
+</div>
+<template id="templateToDoListRow">
+  <tr>
+    <td class="hidden"></td>
+    <td class="hidden"></td>
+    <td style="cursor: pointer; color: green;"></td>
+    <td></td>
+    <td style="cursor: pointer;"></td>
+    <td style="cursor: pointer;"></td>
+  </tr>
+</template>
+<template id="templateSharedToDoListRow">
+  <tr>
+    <td></td>
+    <td style="cursor: pointer; color: green;"></td>
+    <td></td>
+    <td class="hidden"></td>
+    <td class="hidden"></td>
+  </tr>
+</template>
+<template id="templateTableSharedToDoListItem">
+  <td colspan="5">
+    <table>
+      <thead style="text-align: left">
+      <tr>
+        <th>Lekse</th>
+        <th>Frist</th>
+      </tr>
+      </thead>
+      <tbody id="htmlTBodySharedToDoListItem">
+      </tbody>
+    </table>
+  </td>
+</template>
+<template id="templateSharedToDoListItemRow">
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+</template>
+
+<script>
+  let txtCaption;
+  let htmlTBodyToDoList;
+  let htmlTBodySharedToDoList;
+  let htmlTableShardToDoList;
+  let selectToDoList;
+  let selectTags;
+
+  window.onload = async function () {
+    txtCaption = document.getElementById("txtCaption");
+    htmlTBodyToDoList = document.getElementById("htmlTBodyToDoList");
+    htmlTBodySharedToDoList = document.getElementById("htmlTBodySharedToDoList");
+    htmlTableShardToDoList = document.getElementById("htmlTableShardToDoList");
+    selectToDoList = document.getElementById("selectToDoList");
+    selectTags = document.getElementById("selectTags");
+
+    // her settes menyene
+    menu.addMenuItem(new TMenuItem("Min side", navUserPage));
+    menu.addMenuItem(new TMenuItem("Logg ut", logout));
+    document.getElementById("divMenu").appendChild(menu.asHTMLElement());
+
+    await getListFromServer();
+    await getTagFromServer();
+    await getSharedToDoList();
+  };
+
+  let isEdit = false;
+
+  async function getListFromServer() {
+    const data = {
+      token: token,
+      fdUserID: fdUserID,
+    };
+
+    const route = "/todolist/read";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if (Array.isArray(result) === true) {
+      htmlTBodyToDoList.innerHTML = "";
+      let rowOdd = false;
+      for (let i = 0; i < result.length; i++) {
+        const htmlRow = getTemplateContent("templateToDoListRow").querySelector("tr");
+        if(rowOdd){
+          htmlRow.classList.add("rowOdd");
+        }else{
+          htmlRow.classList.add("rowEven");
+        }
+        rowOdd = !rowOdd;
+        const htmlTDs = htmlRow.querySelectorAll("td");
+        htmlTDs[0].innerText = result[i].fdToDoListID.toString();
+        htmlTDs[1].innerText = result[i].fdUserID.toString();
+        htmlTDs[2].innerText = result[i].fdCaption;
+        htmlTDs[2].onclick = function () {
+          fdToDoListID = result[i].fdToDoListID;
+          toDoListCaption = result[i].fdCaption;
+          searchListItemData = null;
+          navListItem();
+        };
+        const checkBox = document.createElement("input");
+        checkBox.type = "checkbox";
+        checkBox.onclick = function () {
+          updateShared(result[i].fdToDoListID, checkBox).then();
+        };
+        checkBox.checked = result[i].fdShared;
+        htmlTDs[3].appendChild(checkBox);
+        htmlTDs[4].innerText = "🔧";
+        htmlTDs[4].onclick = function () {
+          if (isEdit) {
+            return;
+          }
+          htmlTDs[2].onclick = null;
+          editRowItem(htmlTDs, result[i].fdToDoListID);
+          isEdit = true;
+        };
+        htmlTDs[5].innerText = "❌";
+        htmlTDs[5].onclick = function () {
+          confirmDeleteRowItem(result[i]);
+        };
+        htmlTBodyToDoList.appendChild(htmlRow);
+        addToDoListInSearch(result[i]);
+      }
+      isEdit = false;
+    }
+  }
+
+  async function getTagFromServer(){
+    const data = {token: token};
+    const result = await restAPI(RestAPIMethod.POST, "/todolist/listitem/readtag", data);
+    if(Array.isArray(result) === true){
+      for(let i = 0; i < result.length; i++){
+        result[i].fdTagID = parseInt(result[i].fdTagID);
+        selectTags.options.add(new Option(result[i].fdCaption, result[i].fdTagID, false, false));
+      }
+    }
+  }
+
+
+  function addToDoListInSearch(aItem) {
+    const newOption = new Option(aItem.fdCaption, aItem.fdToDoListID, false, false);
+    selectToDoList.options.add(newOption);
+  }
+
+  async function getSharedToDoList() {
+    const data = {
+      token: token,
+      fdUserID: fdUserID,
+    };
+    const route = "/todolist/readsharedtodolist";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if (Array.isArray(result) === true) {
+      htmlTBodySharedToDoList.innerHTML = "";
+      for (let i = 0; i < result.length; i++) {
+        const htmlRow = getTemplateContent("templateSharedToDoListRow");
+        const htmlTDs = htmlRow.querySelectorAll("td");
+        htmlTDs[0].innerText = result[i].fdUserName;
+        htmlTDs[1].innerText = result[i].fdCaption;
+        htmlTDs[1].onclick = async function () {
+          await getSharedToDoListItems(htmlTDs[1], result[i], i);
+        };
+        htmlTDs[2].innerText = result[i].fdSharedCaption;
+        htmlTDs[3].innerText = result[i].fdToDoListID;
+        htmlTDs[4].innerText = result[i].fdSharedUserID;
+        htmlTBodySharedToDoList.appendChild(htmlRow);
+      }
+    }
+  }
+
+  async function getSharedToDoListItems(aTD, aSharedToDoList, aRowIndex) {
+
+    const htmlRow = htmlTableShardToDoList.rows[aRowIndex + 2];
+    if (htmlRow.querySelector("#htmlTBodySharedToDoListItem") !== null) {
+      htmlTableShardToDoList.deleteRow(aRowIndex + 2);
+      return;
+    }
+
+    const data = {
+      token: token,
+      fdToDoListID: aSharedToDoList.fdToDoListID,
+      fdUserID: aSharedToDoList.fdSharedUserID
+    };
+    const route = "todolist/listitem/read";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if (Array.isArray(result) === true) {
+      let htmlRow = htmlTableShardToDoList.insertRow(aRowIndex + 2);
+      const htmlCell = getTemplateContent("templateTableSharedToDoListItem");
+      htmlRow.appendChild(htmlCell);
+      const htmlTBodySharedToDoListItem = htmlRow.querySelector("#htmlTBodySharedToDoListItem");
+      htmlTBodySharedToDoListItem.innerHTML = "";
+      for (let i = 0; i < result.length; i++) {
+        const dateDue = new Date(result[i].fdDateDue);
+
+        htmlRow = getTemplateContent("templateSharedToDoListItemRow");
+        const htmlTDs = htmlRow.querySelectorAll("td");
+        htmlTDs[0].innerText = result[i].fdCaption;
+        htmlTDs[1].innerText = formatDateToLocal(dateDue);
+        htmlTBodySharedToDoListItem.appendChild(htmlRow);
+      }
+    }
+  }
+
+  async function addNewList() {
+    const data = {
+      token: token,
+      fdUserID: fdUserID,
+      fdCaption: txtCaption.value
+    };
+
+    const route = "/todolist/create";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if (Array.isArray(result) === true) {
+      getListFromServer().then();
+    }
+  }
+
+  function editRowItem(aRow, aListID) {
+    const fdCaption = aRow[2].innerText;
+    aRow[2].innerText = aRow[2].innerHTML = "";
+    const htmlInput = document.createElement("input");
+    htmlInput.type = "text";
+    htmlInput.value = fdCaption;
+    htmlInput.style.width = "100%";
+    aRow[2].appendChild(htmlInput);
+    aRow[4].innerText = "✅";
+    aRow[4].onclick = function () {
+      postItemToServer(aListID, htmlInput.value).then();
+    };
+    aRow[5].innerText = "⛔";
+    aRow[5].onclick = function () {
+      getListFromServer().then();
+    }
+  }
+
+  async function postItemToServer(aItemID, aCaption) {
+    const data = {
+      token: token,
+      fdToDoListID: aItemID,
+      fdUserID: fdUserID,
+      fdCaption: aCaption
+    };
+
+    const route = "/todolist/update";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if (Array.isArray(result) === true) {
+      getListFromServer().then();
+    }
+  }
+
+  function confirmDeleteRowItem(aItemRow) {
+    let msg = "Vil du slette liste \"" + aItemRow.fdCaption + "\"\r\n";
+    msg += "og alle elementene i denne listen?";
+    const modal = new TModalWindow(msg, EModalState.Warning, EModalButtons.OkCancel);
+    modal.showModal(
+      async function (aButton) {
+        if (aButton === EModalButtons.Ok) {
+          deleteRowItem(aItemRow.fdToDoListID).then();
+        }
+      }
+    );
+  }
+
+  async function deleteRowItem(aItemID) {
+    const data = {
+      token: token,
+      fdToDoListID: aItemID,
+      fdUserID: fdUserID
+    };
+
+    const route = "/todolist/delete";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if (Array.isArray(result) === true) {
+      getListFromServer().then();
+    }
+  }
+
+  async function updateShared(aItemID, aCheckBox) {
+    const data = {
+      token: token,
+      fdUserID: fdUserID,
+      fdToDoListID: aItemID,
+      fdShared: aCheckBox.checked
+    };
+    const route = "todolist/updateshared";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if (Array.isArray(result) === false) {
+      showError("Kunne ikke endre!");
+    }
+  }
+
+  function searchListItem(){
+    searchListItemData = {
+      fdCaption: document.getElementById("txtSearchListItem").value,
+      fdToDoListID: selectToDoList[selectToDoList.selectedIndex].value,
+      fdTagID: selectTags[selectTags.selectedIndex].value
+    };
+    toDoListCaption = "Søke resultat";
+    navListItem();
+  }
+
+</script>
+</body>
+</html>
