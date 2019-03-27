@@ -1,6 +1,8 @@
+<!DOCTYPE html>
 <html lang="nb">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=150, initial-scale=1.5, user-scalable=no">
   <title>Lekseliste</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
   <script src="/JavaScript/lib.js"></script>
@@ -54,9 +56,6 @@
   let txtNewPassword;
   let txtConfirmPassword;
 
-  const token = localStorage.getItem('token');
-  const fdUserID = localStorage.getItem('fdUserID');
-
   //Venter til hele nettsiden er lastet slik at alle elementer er på plass
   window.onload = function () {
     //henter felter fra HTML (DOM)
@@ -87,11 +86,9 @@
     };
     const result = await restAPI("POST", "/login", data);
     if (Array.isArray(result) === true) {
-      localStorage.setItem('token', result[0].token);
-      localStorage.setItem('fdUserID', result[0].fdUserID);
-      formLoadPage("/todolist",
-        {token: result[0].token, fdUserID: result[0].fdUserID}
-      );
+      token = result[0].token;
+      fdUserID = result[0].fdUserID;
+      navToDoList();
     }else{
       showError("feil brukernavn eller passord");
     }
@@ -111,7 +108,7 @@
     if (Array.isArray(result) === false) {
       showError("Brukernavnet finnes fra før!");
     }else{
-      showInfoMessage("Ny bruker opprettet!\r\nLogg inn med ny bruker");
+      showInfoMessage("Ny bruker er opprettet!\r\nLogin med ny bruker.");
       txtNewUserName.value = "";
       txtNewPassword.value = "";
       txtConfirmPassword.value = "";

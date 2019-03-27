@@ -2,6 +2,7 @@
 <html lang="nb">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <title>Min side</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
   <script src="/JavaScript/lib.js"></script>
@@ -48,8 +49,6 @@
 </template>
 
 <script>
-  const token = localStorage.getItem("token");
-  const fdUserID = localStorage.getItem("fdUserID");
 
   let txtUserName;
   let txtPassword;
@@ -126,17 +125,17 @@
       fdUserName: txtUserName.value
     };
     const result = await restAPI("post", "/users/updateusername", data);
-    if (Array.isArray(result) === false) {
+    if(Array.isArray(result) === false) {
       showError("Brukernavnet finnes fra før!");
     }else{
-      showInfoMessage("Ditt brukernavn er endret");
+      showInfoMessage("Brukernavnet er endret!");
     }
   }
 
   async function restChangePassword() {
     if (isConfirmPasswordOK() === false) {
       txtConfirmPassword.style.backgroundColor = "red";
-      showError("Bekreftet passord stemmer ikke")
+      showError("Bekreftet passord stemmer ikke!");
       return;
     }
     txtConfirmPassword.style.backgroundColor = "white";
@@ -147,9 +146,9 @@
     };
     const result = await restAPI("post", "/users/updatepassword", data);
     if (Array.isArray(result) === false) {
-     showError("Kunne ikke endre passord!");
+      showError("Kunne ikke endre passord!");
     }else{
-      showInfoMessage("Ditt passord er endret");
+      showInfoMessage("Passordet er endret!");
     }
   }
 

@@ -1,0 +1,1 @@
+SELECT * FROM "tblTag" ORDER BY "fdCaption";

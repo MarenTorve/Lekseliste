@@ -6,15 +6,50 @@ body {
 a {
   color: #00B7FF;
 }
+table{
+  border-spacing: 0;
+  width: 100%;
+}
+thead {
+  text-align: left;
+}
+thead tr {
+  background-color: #00B7FF;
+  color: white;
+}
+thead tr th{
+  padding-right: 8px;
+}
+
+.rowOdd{
+  background-color: lightgray;
+  color: white;
+}
+.rowEven{
+  background-color: antiquewhite;
+}
+.rowClickable{
+  color: green;
+  cursor: pointer;
+}
+
+.rowIcon{
+  width: 1px;
+  text-align: center;
+}
 
 .container{
   display: table;
-  max-width: 1024px;
-  padding: 0 0;
-  width: 100%;
-  /*margin: 0 auto*/;
-  /*text-align: center*/;
+  max-width: 512px;
+  /*padding: 0 0;*/
+  width: 98%;
+  border-radius: 1em;
+  padding: 1em;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(0, 0)
 }
+
 
 .hidden{
   display: none;
@@ -56,3 +91,4 @@ a {
   vertical-align: bottom;
   width: 100%;
 }
+

@@ -1,0 +1,1 @@
+SELECT COALESCE(MAX("fdTagID"),0) + 1 AS "fdTagID" FROM "tblTag";

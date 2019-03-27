@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nb">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=150, initial-scale=1.5, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <title>Lekseliste</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
   <script src="/JavaScript/lib.js"></script>
@@ -10,10 +10,10 @@
   <script src="/JavaScript/libMenu.js"></script>
 </head>
 <body>
-<div id="divMenu"></div>
-<h2 id="txtToDoListCaption"></h2>
 <div class="container">
-  <table border="0" style="min-width: 100px; width: 100%">
+  <div id="divMenu"></div>
+  <h2 id="txtToDoListCaption"></h2>
+  <table>
     <thead>
     <tr>
       <th class="hidden">Item ID</th>
@@ -22,70 +22,72 @@
       <th style="text-align: left">Beskrivelse</th>
       <th class="hidden" style="text-align: left">Opprettet</th>
       <th style="text-align: left">Frist</th>
-      <th colspan="3">Rediger</th>
+      <th></th>
+      <th colspan="2">Rediger</th>
     </tr>
     </thead>
     <tbody id="htmlTBodyListItem">
     </tbody>
-  </table><br/>
+  </table>
+  <br/>
+  <hr>
+  <table>
+    <tr>
+      <td style="white-space: nowrap; width:1px;">
+        <label for="txtCaption">Ny lekse:</label>
+      </td>
+      <td>
+        <input type="text" id="txtCaption" style="width: 99%">
+      </td>
+    </tr>
+    <tr>
+      <td  class="rowIcon">
+        <span onclick="addNewListItem().then()">💾</span>
+      </td>
+      <td>
+        <input type="datetime-local" id="dateDue">
+        <label for="dateDue">📅</label>
+      </td>
+    </tr>
+  </table>
+  <span></span>
 </div>
-<br/>
-<div class="container">
-  <label for="txtCaption" class="spanLabel">Ny lekse:</label>
-  <span class="spanInput"><input type="text" id="txtCaption" style="width: 100%"></span>
-</div>
-<div class="container">
-  <label for="dateDue">📅</label>
-  <span><input type="datetime-local" id="dateDue"></span>
-  <span onclick="addNewListItem().then()">💾</span>
-</div>
-<div class="container">
-</div>
-
-
 <template id="templateListItemRow">
   <tr>
     <td class="hidden"></td>
     <td class="hidden"></td>
     <td class="hidden"></td>
-    <td style="color: green; cursor: pointer"></td>
+    <td class="rowClickable"></td>
     <td class="hidden" style="width:1px; white-space: nowrap"></td>
-    <td style="width:1px; white-space: nowrap; background-color: yellow"></td>
-    <td style="cursor: pointer; width:1px"></td>
-    <td style="cursor: pointer; width:1px"></td>
-    <td style="cursor: pointer; width:1px"></td>
+    <td style="width:1px; white-space: nowrap;"></td>
+    <td class="rowClickable rowIcon"></td>
+    <td class="rowClickable rowIcon"></td>
+    <td class="rowClickable rowIcon"></td>
   </tr>
 </template>
 
 <script>
-
-  const token = localStorage.getItem('token');
-  const fdToDoListID = localStorage.getItem('fdToDoListID');
-  const fdUserID = localStorage.getItem('fdUserID');
-  const toDoListCaption = localStorage.getItem('toDoListCaption');
   let dateDue;
   let txtCaption;
   let htmlTBodyListItem;
 
-  window.onload = function(){
+  window.onload = function () {
     const dtNow = new Date();
     dateDue = document.getElementById("dateDue");
     dateDue.value = formatDateToHTML(dtNow);
     txtCaption = document.getElementById("txtCaption");
     htmlTBodyListItem = document.getElementById("htmlTBodyListItem");
     document.getElementById("txtToDoListCaption").innerText = toDoListCaption;
-    menu.addMenuItem(new TMenuItem("Mine lister",navHome));
+    menu.addMenuItem(new TMenuItem("Mine lister", navHome));
     menu.addMenuItem(new TMenuItem("Min side", navUserPage));
     menu.addMenuItem(new TMenuItem("Logut", logout));
     document.getElementById("divMenu").appendChild(menu.asHTMLElement());
     getListItemFromServer().then();
   };
 
-  async function addNewListItem(){
-    const dtNow = new Date();
-    dtNow.setUTCHours(dtNow.getHours());
-    const dtDue = new Date(dateDue.value);
-    dtDue.setUTCHours(dtDue.getHours());
+  async function addNewListItem() {
+    const dtNow = convertDateToUTC(new Date());
+    const dtDue = convertDateToUTC(new Date(dateDue.value));
 
     const data = {
       token: token,
@@ -104,28 +106,47 @@
   }
 
   async function getListItemFromServer() {
-    const data = {
-      token: token,
-      fdToDoListID: fdToDoListID,
-      fdUserID: fdUserID,
-    };
-
-    const route = "/todolist/listitem/read";
+    let data;
+    let route;
+    if(searchListItemData === null){
+      data = {
+        token: token,
+        fdToDoListID: fdToDoListID,
+        fdUserID: fdUserID,
+      };
+      route = "/todolist/listitem/read";
+    }else{
+      data = {
+        token: token,
+        fdUserID: fdUserID,
+        fdCaption: searchListItemData.fdCaption,
+        fdToDoListID: searchListItemData.fdToDoListID,
+        fdTagID: searchListItemData.fdTagID
+      };
+      route = "/todolist/listitem/search";
+    }
     const result = await restAPI(RestAPIMethod.POST, route, data);
-    if(Array.isArray(result) === true) {
+    if (Array.isArray(result) === true) {
+      let rowOdd = false;
       htmlTBodyListItem.innerHTML = "";
       for (let i = 0; i < result.length; i++) {
-        const htmlRow = getTemplateContent("templateListItemRow");
+        const htmlRow = getTemplateContent("templateListItemRow").querySelector("tr");
+        if (rowOdd) {
+          htmlRow.classList.add("rowOdd");
+        } else {
+          htmlRow.classList.add("rowEven");
+        }
+        rowOdd = !rowOdd;
         const dateCreate = new Date(result[i].fdDateCreate);
         const dateDue = new Date(result[i].fdDateDue);
-
         const htmlTDs = htmlRow.querySelectorAll("td");
-        htmlTDs[0].innerText = result[i].fdListItemID.toString();
+        htmlTDs[0].innerText = fdListItemID;
         htmlTDs[1].innerText = result[i].fdToDoListID.toString();
         htmlTDs[2].innerText = result[i].fdUserID.toString();
         htmlTDs[3].innerText = result[i].fdCaption;
-        htmlTDs[3].onclick = function (){
-          navListItemInfo(result[i]);
+        htmlTDs[3].onclick = function(){
+          fdListItemID = result[i].fdListItemID;
+          navListItemInfo();
         };
         htmlTDs[4].innerText = formatDateToLocal(dateCreate);
         htmlTDs[5].innerText = formatDateToLocal(dateDue);
@@ -154,95 +175,90 @@
       }
     }
   }
-    function editListItemRow(aRow, aValues){
-      aRow[3].innerText = aRow[3].innerHTML = "";
-      let htmlInput = document.createElement("input");
-      htmlInput.type = "text";
-      htmlInput.value = aValues.fdCaption;
-      htmlInput.id="txtEditCaption";
-      aRow[3].appendChild(htmlInput);
-      aRow[5].innerText = aRow[5].innerHTML = "";
-      htmlInput = document.createElement("input");
-      htmlInput.type="date";
-      htmlInput.valueAsDate = new Date(aValues.fdDateDue);
-      htmlInput.id="txtEditDateDue";
-      //htmlInput.style.width = "14ch";
-      aRow[5].appendChild(htmlInput);
-      htmlInput = document.createElement("input");
-      htmlInput.type="time";
-      htmlInput.valueAsDate = new Date(aValues.fdDateDue);
-      htmlInput.id="txtEditTimeDue";
-      //htmlInput.style.width = "7ch";
-      aRow[5].appendChild(htmlInput);
-      aRow[7].innerText = "✅";
-      aRow[7].onclick = function () {
-        const dateDue = document.getElementById("txtEditDateDue").valueAsDate;
-        const timeDue = document.getElementById("txtEditTimeDue").valueAsDate;
-        if((dateDue === null) || (timeDue === null)){
-          aRow[7].style.backgroundColor = "red";
-          return;
-        }
-        const params = {
-          fdCaption: document.getElementById("txtEditCaption").value,
-          fdDateDue: new Date(dateDue.valueOf() + timeDue.valueOf())
-        };
-        postListItemToServer(aValues.fdListItemID, params).then();
+
+  function editListItemRow(aRow, aValues) {
+    aRow[3].innerText = aRow[3].innerHTML = "";
+    let htmlInput = document.createElement("input");
+    htmlInput.type = "text";
+    htmlInput.value = aValues.fdCaption;
+    htmlInput.id = "txtEditCaption";
+    aRow[3].appendChild(htmlInput);
+    aRow[5].innerText = aRow[5].innerHTML = "";
+    htmlInput = document.createElement("input");
+    htmlInput.type = "datetime-local";
+    htmlInput.value = formatDateToHTML(new Date(aValues.fdDateDue));
+    htmlInput.id = "txtEditDateDue";
+    //htmlInput.style.width = "14ch";
+    aRow[5].appendChild(htmlInput);
+    aRow[7].innerText = "✅";
+    aRow[7].onclick = function () {
+      const dateDue = document.getElementById("txtEditDateDue").value;
+      if ((dateDue === null)) {
+        aRow[7].style.backgroundColor = "red";
+        return;
+      }
+      const params = {
+        fdCaption: document.getElementById("txtEditCaption").value,
+        fdDateDue: convertDateToUTC(new Date(dateDue))
       };
-      aRow[8].innerText = "⛔";
-      aRow[8].onclick = function () {
-        getListItemFromServer().then();
-      }
+      postListItemToServer(aValues.fdListItemID, params).then();
+    };
+    aRow[8].innerText = "⛔";
+    aRow[8].onclick = function () {
+      getListItemFromServer().then();
     }
+  }
 
-    async function postListItemToServer(aListItemID, aParams) {
-      const data = {
-        token: token,
-        fdListItemID: aListItemID,
-        fdToDoListID: fdToDoListID,
-        fdUserID: fdUserID,
-        fdCaption: aParams.fdCaption,
-        fdDateDue: aParams.fdDateDue
-      };
+  async function postListItemToServer(aListItemID, aParams) {
+    const data = {
+      token: token,
+      fdListItemID: aListItemID,
+      fdToDoListID: fdToDoListID,
+      fdUserID: fdUserID,
+      fdCaption: aParams.fdCaption,
+      fdDateDue: aParams.fdDateDue
+    };
 
-      const route = "/todolist/listitem/update";
-      const result = await restAPI(RestAPIMethod.POST, route, data);
-      if(Array.isArray(result) === true) {
-        getListItemFromServer().then();
-      }
+    const route = "/todolist/listitem/updatecaptionanddue";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if (Array.isArray(result) === true) {
+      getListItemFromServer().then();
     }
+  }
 
-    async function setListItemDone(aListItemID, aDone) {
-      let dateDone = null;
-      if(aDone === true){
-        dateDone = new Date();
-      }
-      const data = {
-        token: token,
-        fdListItemID: aListItemID,
-        fdToDoListID: fdToDoListID,
-        fdUserID: fdUserID,
-        fdDateDone: dateDone
-      };
-      const route = "/todolist/listitem/setdone";
-      const result = await restAPI(RestAPIMethod.POST, route, data);
-      if(Array.isArray(result) === true) {
-        getListItemFromServer().then();
-      }
+  async function setListItemDone(aListItemID, aDone) {
+    let dateDone = null;
+    if (aDone === true) {
+      dateDone = new Date();
+      dateDone = convertDateToUTC(dateDone);
     }
+    const data = {
+      token: token,
+      fdListItemID: aListItemID,
+      fdToDoListID: fdToDoListID,
+      fdUserID: fdUserID,
+      fdDateDone: dateDone
+    };
+    const route = "/todolist/listitem/setdone";
+    const result = await restAPI(RestAPIMethod.POST, route, data);
+    if (Array.isArray(result) === true) {
+      getListItemFromServer().then();
+    }
+  }
 
-  function confirmDeleteItemRow(aItemRow){
+  function confirmDeleteItemRow(aItemRow) {
     const msg = "Vil du slette \"" + aItemRow.fdCaption + "?\"";
-    const modal = new TModalWindow(msg,EModalState.Warning,EModalButtons.OkCancel);
+    const modal = new TModalWindow(msg, EModalState.Warning, EModalButtons.OkCancel);
     modal.showModal(
-      async function(aButton){
-        if(aButton === EModalButtons.Ok){
+      async function (aButton) {
+        if (aButton === EModalButtons.Ok) {
           deleteListItemRow(aItemRow.fdListItemID).then();
         }
       }
     );
   }
 
-  async function deleteListItemRow (aListItemID){
+  async function deleteListItemRow(aListItemID) {
     const data = {
       token: token,
       fdListItemID: aListItemID,
@@ -252,7 +268,7 @@
 
     const route = "/todolist/listitem/delete";
     const result = await restAPI(RestAPIMethod.POST, route, data);
-    if(Array.isArray(result) === true) {
+    if (Array.isArray(result) === true) {
       getListItemFromServer().then();
     }
   }

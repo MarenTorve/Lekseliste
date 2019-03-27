@@ -63,7 +63,7 @@ function showError(aMessage){
   modal.showModal(null);
 }
 
-function showInfoMessage(aMessage){
-  const modal = new TModalWindow(aMessage,EModalState.Normal, EModalButtons.Ok);
+function showInfoMessage(aInfoMessage) {
+  const modal = new TModalWindow(aInfoMessage,EModalState.Normal,EModalButtons.Ok);
   modal.showModal(null);
 }

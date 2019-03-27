@@ -27,6 +27,12 @@ exports.tblListItem = {
   fdDateCreate: "2019-01-01 00:00:00-02",
   fdDateDue: "2019-01-01 00:00:00-02",
   fdDateDone: "2019-01-01 00:00:00-02",
+  fdCaption: "",
+  fdTagID: 0
+};
+
+exports.tblTag = {
+  fdTagID: 0,
   fdCaption: ""
 };
 
