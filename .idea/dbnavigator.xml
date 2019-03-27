@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="false" />
+    <value-preview-text-wrapping value="true" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DataExportManager">
@@ -25,56 +25,11 @@
     <show-object-properties value="true" />
     <loaded-nodes />
   </component>
-  <component name="DBNavigator.Project.DatabaseConsoleManager">
-    <connection id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
-      <console name="Heroku" type="STANDARD" schema="" session="Main"><![CDATA[DELETE FORM "tblListItem"
-WHERE "fdListItemID" = $1 AND "fdToDoListID" = $2 AND "fdUserID" = $3;]]></console>
-      <console name="Heroku 1" type="STANDARD" schema="" session="Main"><![CDATA[CREATE TABLE public."tblUser"
-(
-    "fdUserID" SMALLSERIAL NOT NULL,
-    "fdUserName" text COLLATE pg_catalog."default" NOT NULL,
-    "fdPassword" text COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "tblUser_pkey" PRIMARY KEY ("fdUserID"),
-    CONSTRAINT "tblUser_unique" UNIQUE ("fdUserName")
-);]]></console>
-    </connection>
-  </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files />
   </component>
-  <component name="DBNavigator.Project.DatabaseSessionManager">
-    <connection id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" />
-  </component>
-  <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-list connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" dataset="public.tblToDoList" active-filter-id="EMPTY_FILTER" />
-    <filter-list connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" dataset="public.tblListItem" active-filter-id="">
-      <filter id="8d79ca0e-eea8-44c4-b799-1d14784fa2d5" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
-        <condition column="fdListItemID" operator="=" value="" active="true" />
-      </filter>
-    </filter-list>
-    <filter-list connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" dataset="public.tblSharedToDoList" active-filter-id="EMPTY_FILTER" />
-    <filter-list connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" dataset="public.tblUser" active-filter-id="" />
-  </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
-  </component>
-  <component name="DBNavigator.Project.FileConnectionMappingManager">
-    <mapping file-url="file://$PROJECT_DIR$/Data/CreateListItem.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/selectAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/updatePassword.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/tblToDoList/updateShared.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/createTagList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/CreateToDoList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/insertAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/deleteSharedToDoList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/insertSharedToDoList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/CreateUser.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/selectByUserID.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/selectAllSharedToDoList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/CreateSharedToDoList.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/tblToDoList/deleteSharedToDoListByUserShared.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/tblToDoList/tblListItem/selectByItemID.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
-    <mapping file-url="file://$PROJECT_DIR$/Data/tblUser/deleteAll.sql" connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" session-id="MAIN" current-schema="public" />
   </component>
   <component name="DBNavigator.Project.MethodExecutionManager">
     <method-browser />
@@ -95,95 +50,7 @@ WHERE "fdListItemID" = $1 AND "fdToDoListID" = $2 AND "fdUserID" = $3;]]></conso
     <recently-used-interfaces />
   </component>
   <component name="DBNavigator.Project.Settings">
-    <connections>
-      <connection id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6" active="true">
-        <database>
-          <name value="Heroku" />
-          <description value="" />
-          <database-type value="POSTGRES" />
-          <config-type value="BASIC" />
-          <database-version value="10.6" />
-          <driver-source value="BUILTIN" />
-          <driver-library value="" />
-          <driver value="" />
-          <url-type value="DATABASE" />
-          <host value="ec2-54-217-207-242.eu-west-1.compute.amazonaws.com" />
-          <port value="5432" />
-          <database value="d8grr3ci9cllmn" />
-          <os-authentication value="false" />
-          <empty-password value="false" />
-          <user value="lbngmdrxgdrbua" />
-          <password value="ZDljMzFiN2E1MGNkNDYzN2E2NmJmOGEyZTllYTY0ODdlOTYxZjA1YzFkOTMyOGE1MmNjYzYwZWE5ZDYyMTU2OQ==" />
-        </database>
-        <properties>
-          <auto-commit value="true" />
-          <properties>
-            <property key="sslmode" value="require" />
-          </properties>
-        </properties>
-        <ssh-settings>
-          <active value="false" />
-          <proxy-host value="" />
-          <proxy-port value="22" />
-          <proxy-user value="" />
-          <proxy-password value="" />
-          <auth-type value="PASSWORD" />
-          <key-file value="" />
-          <key-passphrase value="" />
-        </ssh-settings>
-        <ssl-settings>
-          <active value="false" />
-          <certificate-authority-file value="" />
-          <client-certificate-file value="" />
-          <client-key-file value="" />
-        </ssl-settings>
-        <details>
-          <charset value="UTF-8" />
-          <session-management value="true" />
-          <ddl-file-binding value="true" />
-          <database-logging value="false" />
-          <connect-automatically value="true" />
-          <restore-workspace value="true" />
-          <restore-workspace-deep value="true" />
-          <environment-type value="default" />
-          <idle-time-to-disconnect value="30" />
-          <idle-time-to-disconnect-pool value="5" />
-          <password-expiry-time value="10" />
-          <max-connection-pool-size value="7" />
-          <alternative-statement-delimiter value="" />
-        </details>
-        <object-filters hide-empty-schemas="false">
-          <object-type-filter use-master-settings="true">
-            <object-type name="SCHEMA" enabled="true" />
-            <object-type name="USER" enabled="true" />
-            <object-type name="ROLE" enabled="true" />
-            <object-type name="PRIVILEGE" enabled="true" />
-            <object-type name="CHARSET" enabled="true" />
-            <object-type name="TABLE" enabled="true" />
-            <object-type name="VIEW" enabled="true" />
-            <object-type name="MATERIALIZED_VIEW" enabled="true" />
-            <object-type name="NESTED_TABLE" enabled="true" />
-            <object-type name="COLUMN" enabled="true" />
-            <object-type name="INDEX" enabled="true" />
-            <object-type name="CONSTRAINT" enabled="true" />
-            <object-type name="DATASET_TRIGGER" enabled="true" />
-            <object-type name="DATABASE_TRIGGER" enabled="true" />
-            <object-type name="SYNONYM" enabled="true" />
-            <object-type name="SEQUENCE" enabled="true" />
-            <object-type name="PROCEDURE" enabled="true" />
-            <object-type name="FUNCTION" enabled="true" />
-            <object-type name="PACKAGE" enabled="true" />
-            <object-type name="TYPE" enabled="true" />
-            <object-type name="TYPE_ATTRIBUTE" enabled="true" />
-            <object-type name="ARGUMENT" enabled="true" />
-            <object-type name="DIMENSION" enabled="true" />
-            <object-type name="CLUSTER" enabled="true" />
-            <object-type name="DBLINK" enabled="true" />
-          </object-type-filter>
-          <object-name-filters />
-        </object-filters>
-      </connection>
-    </connections>
+    <connections />
     <browser-settings>
       <general>
         <display-mode value="TABBED" />

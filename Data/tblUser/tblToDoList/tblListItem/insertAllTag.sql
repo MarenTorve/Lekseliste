@@ -1,1 +1,0 @@
-INSERT INTO "tblTag" ("fdTagID", "fdCaption") VALUES ($1, $2);

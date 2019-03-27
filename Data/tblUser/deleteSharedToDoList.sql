@@ -1,1 +1,0 @@
-DELETE FROM "tblSharedToDoList" WHERE "fdSharedUserID" = $1 AND "fdToDoListID" = $2 AND "fdUserID" = $3;
