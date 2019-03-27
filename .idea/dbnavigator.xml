@@ -23,20 +23,25 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes />
+    <loaded-nodes>
+      <connection connection-id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
+        <schema name="pg_catalog" object-types="table, function, view" />
+        <schema name="public" object-types="table, function, view" />
+      </connection>
+    </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="448a0c41-8f65-4751-a66b-1a8c83e8e9f6">
-      <console name="Heroku" type="STANDARD" schema="" session="Main"><![CDATA[DELETE FORM "tblListItem"
-WHERE "fdListItemID" = $1 AND "fdToDoListID" = $2 AND "fdUserID" = $3;]]></console>
-      <console name="Heroku 1" type="STANDARD" schema="" session="Main"><![CDATA[CREATE TABLE public."tblUser"
+      <console name="Heroku" type="STANDARD" schema="" session="Main">DELETE FORM &quot;tblListItem&quot;
+WHERE &quot;fdListItemID&quot; = $1 AND &quot;fdToDoListID&quot; = $2 AND &quot;fdUserID&quot; = $3;</console>
+      <console name="Heroku 1" type="STANDARD" schema="" session="Main">CREATE TABLE public.&quot;tblUser&quot;
 (
-    "fdUserID" SMALLSERIAL NOT NULL,
-    "fdUserName" text COLLATE pg_catalog."default" NOT NULL,
-    "fdPassword" text COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "tblUser_pkey" PRIMARY KEY ("fdUserID"),
-    CONSTRAINT "tblUser_unique" UNIQUE ("fdUserName")
-);]]></console>
+    &quot;fdUserID&quot; SMALLSERIAL NOT NULL,
+    &quot;fdUserName&quot; text COLLATE pg_catalog.&quot;default&quot; NOT NULL,
+    &quot;fdPassword&quot; text COLLATE pg_catalog.&quot;default&quot; NOT NULL,
+    CONSTRAINT &quot;tblUser_pkey&quot; PRIMARY KEY (&quot;fdUserID&quot;),
+    CONSTRAINT &quot;tblUser_unique&quot; UNIQUE (&quot;fdUserName&quot;)
+);</console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
