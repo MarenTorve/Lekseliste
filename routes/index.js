@@ -11,7 +11,7 @@ const selectAuthUser = fs.readFileSync(pathSQL + 'selectAuthUser.sql', 'utf8');
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
-  res.sendFile(pathHTML + "/welcome.html");
+  //res.sendFile(pathHTML + "/welcome.html");
 });
 
 router.get('/index', async function (req, res, next) {
