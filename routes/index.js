@@ -4,7 +4,7 @@ const path = require('path');
 const pathHTML = path.join(__dirname, "../API/HTML");
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.sendFile( pathHTML + "/index.html");
+  res.status(200).send("Hei på deg");
 });
 
 module.exports = router;
